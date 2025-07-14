@@ -100,6 +100,9 @@ let splashWindow = null;
 /** @type {Electron.BrowserWindow | null} */
 let agentWindow = null;
 const getAgentWindow = () => agentWindow;
+/** @type {Electron.BrowserWindow | null} */
+let transakWindow = null;
+const getTransakWindow = () => transakWindow;
 
 /** @type {Electron.Tray | null} */
 let tray = null;
@@ -400,6 +403,38 @@ const createAgentActivityWindow = async () => {
   });
 
   return agentWindow;
+};
+
+/**
+ * Create the on-ramping window for displaying transak widget
+ */
+/** @type {()=>Promise<BrowserWindow|undefined>} */
+const createTransakWindow = async () => {
+  if (!getTransakWindow() || getTransakWindow().isDestroyed) {
+    transakWindow = new BrowserWindow({
+      title: 'Transak',
+      width: 500,
+      height: 700,
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+        preload: path.join(__dirname, 'preload.js'),
+      },
+    });
+
+    transakWindow.loadURL('http://localhost:3000/transak').then(() => {
+      logger.electron('transakWindow', transakWindow.url);
+    });
+  } else {
+    logger.electron('Transak window already exists');
+  }
+
+  transakWindow.on('close', function (event) {
+    event.preventDefault();
+    transakWindow?.hide();
+  });
+
+  return transakWindow;
 };
 
 async function launchDaemon() {
@@ -906,6 +941,9 @@ ipcMain.handle('save-logs', async (_, data) => {
   return result;
 });
 
+/**
+ * Agent UI window handlers
+ */
 ipcMain.handle('agent-activity-window-goto', async (_event, url) => {
   logger.electron(`agent-activity-window-goto: ${url}`);
 
@@ -966,4 +1004,23 @@ ipcMain.handle('agent-activity-window-minimize', () => {
   logger.electron('agent-activity-window-minimize');
   if (!getAgentWindow() || getAgentWindow().isDestroyed()) return; // nothing to minimize
   getAgentWindow()?.then((aaw) => aaw.minimize());
+});
+
+/**
+ * Transak window handlers
+ */
+ipcMain.handle('transak-window-show', () => {
+  logger.electron('transak-window-show');
+
+  if (!getTransakWindow() || getTransakWindow()?.isDestroyed()) {
+    createTransakWindow()?.then((window) => window.show());
+  } else {
+    getTransakWindow()?.show();
+  }
+});
+
+ipcMain.handle('transak-window-hide', () => {
+  logger.electron('transak-window-hide');
+  if (!getTransakWindow() || getTransakWindow().isDestroyed()) return; // already destroyed
+  getTransakWindow()?.hide();
 });

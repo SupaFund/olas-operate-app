@@ -46,6 +46,10 @@ type ElectronApiContextProps = {
     { response: AgentHealthCheckResponse | null } | { error: string }
   >;
   agentActivityWindow?: Partial<ElectronApiAgentActivityWindow>;
+  transakWindow?: {
+    show?: () => void;
+    hide?: () => void;
+  };
 };
 
 export const ElectronApiContext = createContext<ElectronApiContextProps>({
@@ -69,6 +73,7 @@ export const ElectronApiContext = createContext<ElectronApiContextProps>({
   setAppHeight: () => {},
   saveLogs: async () => ({ success: false }),
   openPath: () => {},
+  openExternal: () => {},
   healthCheck: async () => ({ response: null }),
   agentActivityWindow: {
     init: async () => {},
@@ -77,6 +82,10 @@ export const ElectronApiContext = createContext<ElectronApiContextProps>({
     show: () => {},
     close: () => {},
     minimize: () => {},
+  },
+  transakWindow: {
+    show: () => {},
+    hide: () => {},
   },
 });
 
@@ -126,6 +135,10 @@ export const ElectronApiProvider = ({ children }: PropsWithChildren) => {
           show: getElectronApiFunction('agentActivityWindow.show'),
           close: getElectronApiFunction('agentActivityWindow.close'),
           minimize: getElectronApiFunction('agentActivityWindow.minimize'),
+        },
+        transakWindow: {
+          show: getElectronApiFunction('transakWindow.show'),
+          hide: getElectronApiFunction('transakWindow.hide'),
         },
       }}
     >

@@ -23,6 +23,7 @@ import { NA } from '@/constants/symbols';
 import { EvmChainId } from '@/enums/Chain';
 import { SetupScreen } from '@/enums/SetupScreen';
 import { useMasterBalances } from '@/hooks/useBalanceContext';
+import { useElectronApi } from '@/hooks/useElectronApi';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { useServices } from '@/hooks/useServices';
 import { useSetup } from '@/hooks/useSetup';
@@ -224,6 +225,7 @@ export const SetupEoaFunding = () => {
   const { masterWalletBalances } = useMasterBalances();
   const updateBeforeBridgingFunds = useBeforeBridgeFunds();
 
+  const { transakWindow } = useElectronApi();
   const [currentChain, setCurrentChain] = useState<EvmChainId>(
     selectedAgentConfig.evmHomeChainId,
   );
@@ -313,12 +315,14 @@ export const SetupEoaFunding = () => {
         className="mt-12 mb-12"
       >
         <Segmented<SendFundAction>
+          vertical
           options={[
             {
               label: `Send on ${currentFundingRequirements.name}`,
               value: 'transfer',
             },
             { label: 'Bridge from Ethereum', value: 'bridge' },
+            { label: 'On-ramp from Optimism', value: 'onramp' },
           ]}
           onChange={setFundType}
           value={fundType}
@@ -327,14 +331,15 @@ export const SetupEoaFunding = () => {
         />
       </CardSection>
 
-      {fundType === 'transfer' ? (
+      {fundType === 'transfer' && (
         <SetupEoaFundingForChainV2
           isFunded={isFunded}
           minRequiredBalance={currentFundingRequirements.safeCreationThreshold}
           currency={currentFundingRequirements.nativeToken.symbol}
           chainName={currentFundingRequirements.name}
         />
-      ) : (
+      )}
+      {fundType === 'bridge' && (
         <CardSection $padding="0px 24px" vertical gap={16}>
           <Text className="text-base">
             Bridge from Ethereum directly to your agent. No further funds will
@@ -344,6 +349,15 @@ export const SetupEoaFunding = () => {
             Bridge funds
           </Button>
         </CardSection>
+      )}
+      {fundType === 'onramp' && (
+        <Button
+          onClick={() => {
+            transakWindow?.show?.();
+          }}
+        >
+          Start on-ramping
+        </Button>
       )}
     </CardFlex>
   );
