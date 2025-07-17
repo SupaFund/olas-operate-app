@@ -290,12 +290,38 @@ export const SetupEoaFunding = () => {
 
   if (!isBridgeOnboardingEnabled) {
     return (
-      <SetupEoaFundingForChain
-        isFunded={isFunded}
-        minRequiredBalance={currentFundingRequirements.safeCreationThreshold}
-        currency={currentFundingRequirements.nativeToken.symbol}
-        chainName={currentFundingRequirements.name}
-      />
+      <>
+        <SetupEoaFundingForChain
+          isFunded={isFunded}
+          minRequiredBalance={currentFundingRequirements.safeCreationThreshold}
+          currency={currentFundingRequirements.nativeToken.symbol}
+          chainName={currentFundingRequirements.name}
+        />
+        
+        {/* Debug Skip Button - Only visible in development */}
+        {process.env.NODE_ENV === 'development' && (
+          <CardFlex $noBorder className="mt-8">
+            <CustomAlert
+              type="warning"
+              showIcon
+              message="Debug Mode"
+              description={
+                <Flex vertical gap={8}>
+                  <Text>Skip funding for development/debugging purposes.</Text>
+                  <Button 
+                    type="dashed" 
+                    danger 
+                    block
+                    onClick={() => goto(SetupScreen.SetupCreateSafe)}
+                  >
+                    Skip to Create Safe (Debug Only)
+                  </Button>
+                </Flex>
+              }
+            />
+          </CardFlex>
+        )}
+      </>
     );
   }
 
@@ -343,6 +369,30 @@ export const SetupEoaFunding = () => {
           <Button onClick={handleBridgeFunds} block type="primary" size="large">
             Bridge funds
           </Button>
+        </CardSection>
+      )}
+      
+      {/* Debug Skip Button - Only visible in development */}
+      {process.env.NODE_ENV === 'development' && (
+        <CardSection $padding="0px 24px" className="mt-16">
+          <CustomAlert
+            type="warning"
+            showIcon
+            message="Debug Mode"
+            description={
+              <Flex vertical gap={8}>
+                <Text>Skip funding for development/debugging purposes.</Text>
+                <Button 
+                  type="dashed" 
+                  danger 
+                  block
+                  onClick={() => goto(SetupScreen.SetupCreateSafe)}
+                >
+                  Skip to Create Safe (Debug Only)
+                </Button>
+              </Flex>
+            }
+          />
         </CardSection>
       )}
     </CardFlex>

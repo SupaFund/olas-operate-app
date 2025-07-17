@@ -4,6 +4,7 @@ import { MiddlewareChain } from '@/client';
 import {
   MODIUS_SERVICE_TEMPLATE,
   OPTIMUS_SERVICE_TEMPLATE,
+  SUPAFUND_SERVICE_TEMPLATE,
 } from '@/constants/serviceTemplates';
 import { AgentType } from '@/enums/Agent';
 import { EvmChainId } from '@/enums/Chain';
@@ -12,6 +13,7 @@ import { AgentsFunBaseService } from '@/service/agents/AgentsFunBase';
 import { ModiusService } from '@/service/agents/Modius';
 import { OptimismService } from '@/service/agents/Optimism';
 import { PredictTraderService } from '@/service/agents/PredictTrader';
+import { SupafundService } from '@/service/agents/Supafund';
 import { Address } from '@/types/Address';
 import { AgentConfig } from '@/types/Agent';
 
@@ -115,5 +117,18 @@ export const AGENT_CONFIG: {
     displayName: 'Agents.fun agent - Celo',
     description:
       'Autonomously posts to Twitter, creates and trades memecoins, and interacts with other agents. Agent is operating on Celo chain.',
+  },
+  [AgentType.Supafund]: {
+    isAgentEnabled: true,
+    requiresSetup: true,
+    name: 'Supafund Agent',
+    evmHomeChainId: EvmChainId.Gnosis,
+    middlewareHomeChainId: MiddlewareChain.GNOSIS,
+    requiresAgentSafesOn: [EvmChainId.Gnosis],
+    requiresMasterSafesOn: [EvmChainId.Gnosis],
+    serviceApi: SupafundService,
+    displayName: 'Supafund agent',
+    description:
+      'Predicts whether emerging projects will achieve key milestones, providing detailed AI-powered analysis of exciting new projects.',
   },
 };

@@ -7,6 +7,9 @@ import { STAKING_PROGRAM_IDS } from '@/enums/StakingProgram';
 import { TokenSymbol } from '@/enums/Token';
 import { parseEther, parseUnits } from '@/utils/numberFormatters';
 
+// Use DEV_RPC or fallback to localhost for development
+const DEFAULT_RPC = process.env.DEV_RPC || process.env.GNOSIS_RPC || 'http://localhost:8545';
+
 /**
  * Prefix for KPI description in service templates.
  * This is used track services that are part of the Pearl service suite.
@@ -26,7 +29,7 @@ export const PREDICT_SERVICE_TEMPLATE: ServiceTemplate = {
     [MiddlewareChain.GNOSIS]: {
       staking_program_id: STAKING_PROGRAM_IDS.PearlBeta, // default, may be overwritten
       nft: 'bafybeig64atqaladigoc3ds4arltdu63wkdrk3gesjfvnfdmz35amv7faq',
-      rpc: 'http://localhost:8545', // overwritten
+      rpc: DEFAULT_RPC, // overwritten
       agent_id: 14,
       threshold: 1,
       use_staking: true,
@@ -221,7 +224,7 @@ const AGENTS_FUN_BASE_TEMPLATE: ServiceTemplate = {
     [MiddlewareChain.BASE]: {
       staking_program_id: STAKING_PROGRAM_IDS.AgentsFun1, // default, may be overwritten
       nft: 'bafybeiaakdeconw7j5z76fgghfdjmsr6tzejotxcwnvmp3nroaw3glgyve',
-      rpc: 'http://localhost:8545', // overwritten
+      rpc: DEFAULT_RPC, // overwritten
       agent_id: 43,
       threshold: 1,
       use_staking: true,
@@ -250,7 +253,7 @@ export const AGENTS_FUN_CELO_TEMPLATE: ServiceTemplate = {
     [MiddlewareChain.CELO]: {
       staking_program_id: STAKING_PROGRAM_IDS.MemeCeloAlpha2, // default, may be overwritten
       nft: 'bafybeiaakdeconw7j5z76fgghfdjmsr6tzejotxcwnvmp3nroaw3glgyve',
-      rpc: 'http://localhost:8545', // overwritten
+      rpc: DEFAULT_RPC, // overwritten
       agent_id: 43,
       threshold: 1,
       use_staking: true,
@@ -286,7 +289,7 @@ export const MODIUS_SERVICE_TEMPLATE: ServiceTemplate = {
     [MiddlewareChain.MODE]: {
       staking_program_id: STAKING_PROGRAM_IDS.ModiusAlpha, // default, may be overwritten
       nft: 'bafybeiafjcy63arqkfqbtjqpzxyeia2tscpbyradb4zlpzhgc3xymwmmtu',
-      rpc: 'http://localhost:8545', // overwritten
+      rpc: DEFAULT_RPC, // overwritten
       agent_id: 40,
       threshold: 1,
       use_staking: true,
@@ -436,7 +439,7 @@ export const OPTIMUS_SERVICE_TEMPLATE: ServiceTemplate = {
     [MiddlewareChain.OPTIMISM]: {
       staking_program_id: STAKING_PROGRAM_IDS.OptimusAlpha, // default, may be overwritten
       nft: 'bafybeiafjcy63arqkfqbtjqpzxyeia2tscpbyradb4zlpzhgc3xymwmmtu',
-      rpc: 'http://localhost:8545', // overwritten
+      rpc: DEFAULT_RPC, // overwritten
       agent_id: 40,
       threshold: 1,
       use_staking: true,
@@ -553,12 +556,82 @@ export const OPTIMUS_SERVICE_TEMPLATE: ServiceTemplate = {
   ...BABYDEGEN_COMMON_TEMPLATE,
 } as const;
 
+/**
+ * Supafund Service Template
+ * A specialized prediction market agent for evaluating startup and crypto project milestones
+ */
+export const SUPAFUND_SERVICE_TEMPLATE: ServiceTemplate = {
+  agentType: AgentType.Supafund,
+  name: 'Supafund Agent',
+  hash: 'bafybeievvf3663md525u2khoxjlufgp6hsf6vf6kah4xqckksj5nmtkg5q', // TODO: Replace with actual Supafund service hash
+  description: `${KPI_DESC_PREFIX} Predicts whether emerging projects will achieve key milestones, providing detailed AI-powered analysis`,
+  image:
+    'https://operate.olas.network/_next/image?url=%2Fimages%2Fprediction-agent.png&w=3840&q=75', // TODO: Replace with Supafund image
+  service_version: 'v0.1.0',
+  home_chain: MiddlewareChain.GNOSIS,
+  configurations: {
+    [MiddlewareChain.GNOSIS]: {
+      staking_program_id: STAKING_PROGRAM_IDS.PearlBeta,
+      nft: 'bafybeig64atqaladigoc3ds4arltdu63wkdrk3gesjfvnfdmz35amv7faq', // TODO: Replace with Supafund NFT
+      rpc: DEFAULT_RPC,
+      agent_id: 14, // TODO: Replace with Supafund agent ID
+      threshold: 1,
+      use_staking: true,
+      use_mech_marketplace: false,
+      cost_of_bond: +parseEther(0.001),
+      monthly_gas_estimate: +parseEther(10),
+      fund_requirements: {
+        [ethers.constants.AddressZero]: {
+          agent: +parseEther(2),
+          safe: +parseEther(5),
+        },
+      },
+    },
+  },
+  env_variables: {
+    // Inherit most environment variables from PREDICT_SERVICE_TEMPLATE
+    ...PREDICT_SERVICE_TEMPLATE.env_variables,
+    // Add Supafund-specific environment variables
+    SUPAFUND_WEIGHTS: {
+      name: 'Supafund agent weights configuration',
+      description: 'JSON string with weights for: founder_team, market_opportunity, technical_analysis, social_sentiment, tokenomics',
+      value: '{"founder_team":20,"market_opportunity":20,"technical_analysis":20,"social_sentiment":20,"tokenomics":20}',
+      provision_type: EnvProvisionType.USER,
+    },
+    SUPAFUND_API_ENDPOINT: {
+      name: 'Supafund API endpoint',
+      description: 'API endpoint for Supafund backend services',
+      value: '',
+      provision_type: EnvProvisionType.USER,
+    },
+    SUPAFUND_MARKET_CREATORS: {
+      name: 'Supafund market creator addresses',
+      description: 'List of addresses that create Supafund prediction markets',
+      value: '["0x89c5cc945dd550BcFfb72Fe42BfF002429F46Fec"]', // TODO: Replace with actual Supafund creator addresses
+      provision_type: EnvProvisionType.FIXED,
+    },
+    MIN_EDGE_THRESHOLD: {
+      name: 'Minimum edge threshold',
+      description: 'Minimum edge percentage required to place a bet',
+      value: '5',
+      provision_type: EnvProvisionType.USER,
+    },
+    RISK_TOLERANCE: {
+      name: 'Risk tolerance',
+      description: 'Risk tolerance level (1-10)',
+      value: '5',
+      provision_type: EnvProvisionType.USER,
+    },
+  },
+} as const;
+
 export const SERVICE_TEMPLATES: ServiceTemplate[] = [
   PREDICT_SERVICE_TEMPLATE,
   AGENTS_FUN_BASE_TEMPLATE,
   MODIUS_SERVICE_TEMPLATE,
   AGENTS_FUN_CELO_TEMPLATE,
   OPTIMUS_SERVICE_TEMPLATE,
+  SUPAFUND_SERVICE_TEMPLATE,
 ] as const;
 
 export const getServiceTemplates = (): ServiceTemplate[] => SERVICE_TEMPLATES;

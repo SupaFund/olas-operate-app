@@ -37,7 +37,7 @@ export const GNOSIS_STAKING_PROGRAMS: StakingProgramMap = {
     deprecated: true,
     name: 'Pearl Alpha',
     chainId: EvmChainId.Gnosis,
-    agentsSupported: [AgentType.PredictTrader],
+    agentsSupported: [AgentType.PredictTrader, AgentType.Supafund],
     stakingRequirements: {
       [TokenSymbol.OLAS]: 20,
     },
@@ -55,7 +55,7 @@ export const GNOSIS_STAKING_PROGRAMS: StakingProgramMap = {
   [STAKING_PROGRAM_IDS.PearlBeta]: {
     chainId: EvmChainId.Gnosis,
     name: 'Pearl Beta',
-    agentsSupported: [AgentType.PredictTrader],
+    agentsSupported: [AgentType.PredictTrader, AgentType.Supafund],
     stakingRequirements: {
       [TokenSymbol.OLAS]: 40,
     },
@@ -71,7 +71,7 @@ export const GNOSIS_STAKING_PROGRAMS: StakingProgramMap = {
   [STAKING_PROGRAM_IDS.PearlBeta2]: {
     chainId: EvmChainId.Gnosis,
     name: 'Pearl Beta 2',
-    agentsSupported: [AgentType.PredictTrader],
+    agentsSupported: [AgentType.PredictTrader, AgentType.Supafund],
     stakingRequirements: {
       [TokenSymbol.OLAS]: 100,
     },
@@ -89,7 +89,7 @@ export const GNOSIS_STAKING_PROGRAMS: StakingProgramMap = {
   [STAKING_PROGRAM_IDS.PearlBeta3]: {
     chainId: EvmChainId.Gnosis,
     name: 'Pearl Beta 3',
-    agentsSupported: [AgentType.PredictTrader],
+    agentsSupported: [AgentType.PredictTrader, AgentType.Supafund],
     stakingRequirements: {
       [TokenSymbol.OLAS]: 100,
     },
@@ -107,7 +107,7 @@ export const GNOSIS_STAKING_PROGRAMS: StakingProgramMap = {
   [STAKING_PROGRAM_IDS.PearlBeta4]: {
     chainId: EvmChainId.Gnosis,
     name: 'Pearl Beta 4',
-    agentsSupported: [AgentType.PredictTrader],
+    agentsSupported: [AgentType.PredictTrader, AgentType.Supafund],
     stakingRequirements: {
       [TokenSymbol.OLAS]: 100,
     },
@@ -125,7 +125,7 @@ export const GNOSIS_STAKING_PROGRAMS: StakingProgramMap = {
   [STAKING_PROGRAM_IDS.PearlBeta5]: {
     chainId: EvmChainId.Gnosis,
     name: 'Pearl Beta 5',
-    agentsSupported: [AgentType.PredictTrader],
+    agentsSupported: [AgentType.PredictTrader, AgentType.Supafund],
     stakingRequirements: {
       [TokenSymbol.OLAS]: 10,
     },
@@ -143,7 +143,7 @@ export const GNOSIS_STAKING_PROGRAMS: StakingProgramMap = {
   [STAKING_PROGRAM_IDS.PearlBeta6]: {
     chainId: EvmChainId.Gnosis,
     name: 'Pearl Beta 6',
-    agentsSupported: [AgentType.PredictTrader],
+    agentsSupported: [AgentType.PredictTrader, AgentType.Supafund],
     stakingRequirements: {
       [TokenSymbol.OLAS]: 5000,
     },
@@ -161,7 +161,7 @@ export const GNOSIS_STAKING_PROGRAMS: StakingProgramMap = {
   [STAKING_PROGRAM_IDS.PearlBetaMechMarketplace]: {
     chainId: EvmChainId.Gnosis,
     name: 'Pearl Beta Mech Marketplace',
-    agentsSupported: [AgentType.PredictTrader],
+    agentsSupported: [AgentType.PredictTrader, AgentType.Supafund],
     stakingRequirements: {
       [TokenSymbol.OLAS]: 40,
     },

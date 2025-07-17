@@ -90,6 +90,18 @@ const FEATURES_CONFIG = FeaturesConfigSchema.parse({
     'bridge-onboarding': true,
     'bridge-add-funds': true,
   },
+  [AgentType.Supafund]: {
+    'manage-wallet': true,
+    'withdraw-funds': true,
+    'last-transactions': true,
+    'rewards-streak': true,
+    'staking-contract-section': true,
+    'agent-activity': true,
+    'backup-via-safe': true,
+    'agent-settings': false,
+    'bridge-onboarding': true,
+    'bridge-add-funds': true,
+  },
 });
 
 type FeatureFlagReturn<T extends FeatureFlags | FeatureFlags[]> =
