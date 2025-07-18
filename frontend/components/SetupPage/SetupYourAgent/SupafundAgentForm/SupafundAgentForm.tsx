@@ -5,17 +5,17 @@ import {
   Col,
   Form,
   Input,
+  message,
   Progress,
   Row,
   Slider,
   Space,
   Typography,
-  message,
 } from 'antd';
 import React, { useCallback, useState } from 'react';
 
-import { FormFlex } from '@/components/styled/FormFlex';
 import { ServiceTemplate } from '@/client';
+import { FormFlex } from '@/components/styled/FormFlex';
 import { SetupScreen } from '@/enums/SetupScreen';
 import { useSetup } from '@/hooks/useSetup';
 
@@ -45,36 +45,62 @@ const presetConfigurations = {
   balanced: {
     name: 'Balanced',
     description: 'Equal weight across all factors',
-    weights: { founder_team: 20, market_opportunity: 20, technical_analysis: 20, social_sentiment: 20, tokenomics: 20 }
+    weights: {
+      founder_team: 20,
+      market_opportunity: 20,
+      technical_analysis: 20,
+      social_sentiment: 20,
+      tokenomics: 20,
+    },
   },
   technical: {
     name: 'Technical Focus',
     description: 'Emphasizes code quality and development',
-    weights: { founder_team: 15, market_opportunity: 15, technical_analysis: 40, social_sentiment: 15, tokenomics: 15 }
+    weights: {
+      founder_team: 15,
+      market_opportunity: 15,
+      technical_analysis: 40,
+      social_sentiment: 15,
+      tokenomics: 15,
+    },
   },
   fundamental: {
     name: 'Fundamental Focus',
     description: 'Focuses on team and market opportunity',
-    weights: { founder_team: 35, market_opportunity: 35, technical_analysis: 15, social_sentiment: 10, tokenomics: 5 }
+    weights: {
+      founder_team: 35,
+      market_opportunity: 35,
+      technical_analysis: 15,
+      social_sentiment: 10,
+      tokenomics: 5,
+    },
   },
   social: {
     name: 'Social Driven',
     description: 'Prioritizes community and sentiment',
-    weights: { founder_team: 20, market_opportunity: 15, technical_analysis: 15, social_sentiment: 35, tokenomics: 15 }
-  }
+    weights: {
+      founder_team: 20,
+      market_opportunity: 15,
+      technical_analysis: 15,
+      social_sentiment: 35,
+      tokenomics: 15,
+    },
+  },
 };
 
 const weightDescriptions = {
-  founder_team: 'Evaluates team experience, track record, and domain expertise.',
-  market_opportunity: 'Assesses market size, growth potential, and competitive landscape.',
-  technical_analysis: 'Evaluates code quality, development activity, and innovation.',
-  social_sentiment: 'Measures community engagement, social media presence, and sentiment.',
+  founder_team:
+    'Evaluates team experience, track record, and domain expertise.',
+  market_opportunity:
+    'Assesses market size, growth potential, and competitive landscape.',
+  technical_analysis:
+    'Evaluates code quality, development activity, and innovation.',
+  social_sentiment:
+    'Measures community engagement, social media presence, and sentiment.',
   tokenomics: 'Analyzes token distribution, utility, and economic model.',
 };
 
-export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = ({
-  serviceTemplate,
-}) => {
+export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = () => {
   const { goto } = useSetup();
   const [form] = Form.useForm();
   const [weights, setWeights] = useState<SupafundWeights>(defaultWeights);
@@ -96,20 +122,20 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = ({
     try {
       setIsSubmitting(true);
       await form.validateFields();
-      
-      // TODO: Remove this mock when backend is ready
-      // For now, we'll just simulate a successful setup
-      console.log('Supafund Agent Configuration:', {
+
+      // Save configuration to backend
+      const config = {
         weights,
         apiEndpoint,
         minEdgeThreshold,
         riskTolerance,
-      });
+      };
 
-      // Simulate a delay for realistic UX
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // TODO: Implement actual backend integration
+      // Store in localStorage for now (will be replaced with backend)
+      localStorage.setItem('supafund_config', JSON.stringify(config));
 
-      message.success('Supafund agent configuration saved! (Mock mode)');
+      message.success('Supafund agent configuration saved!');
       goto(SetupScreen.SetupEoaFunding);
     } catch (error) {
       message.error('Please check your configuration.');
@@ -117,16 +143,12 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = ({
     } finally {
       setIsSubmitting(false);
     }
-  }, [
-    form,
-    weights,
-    apiEndpoint,
-    minEdgeThreshold,
-    riskTolerance,
-    goto,
-  ]);
+  }, [form, weights, apiEndpoint, minEdgeThreshold, riskTolerance, goto]);
 
-  const totalWeight = Object.values(weights).reduce((sum, weight) => sum + weight, 0);
+  const totalWeight = Object.values(weights).reduce(
+    (sum, weight) => sum + weight,
+    0,
+  );
   const isWeightValid = totalWeight === 100;
   const isWeightOverLimit = totalWeight > 100;
 
@@ -136,14 +158,15 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = ({
         <Card className="mb-4">
           <Title level={5}>Personalized Trading Strategy</Title>
           <Text>
-            The Supafund Agent uses your personal weights to trade on prediction markets.
-            Adjust the sliders below to customize your agent's focus areas.
+            The Supafund Agent uses your personal weights to trade on prediction
+            markets. Adjust the sliders below to customize your agent&apos;s
+            focus areas.
           </Text>
-          
           {!isWeightValid && (
             <div className="mt-4">
               <Text type="danger">
-                <ExclamationCircleOutlined /> Total weight must equal 100% (currently {totalWeight}%)
+                <ExclamationCircleOutlined /> Total weight must equal 100%
+                (currently {totalWeight}%)
               </Text>
             </div>
           )}
@@ -151,9 +174,9 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = ({
           <div className="mt-4 mb-4">
             <Row justify="space-between" align="middle" className="mb-3">
               <Text strong>Quick Presets:</Text>
-              <Button 
-                size="small" 
-                type="link" 
+              <Button
+                size="small"
+                type="link"
                 onClick={() => setWeights(defaultWeights)}
                 style={{ padding: 0 }}
               >
@@ -165,20 +188,38 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = ({
                 <Col span={6} key={key}>
                   <Button
                     size="small"
-                    onClick={() => handlePresetSelect(key as keyof typeof presetConfigurations)}
-                    style={{ 
-                      width: '100%', 
-                      height: 'auto', 
+                    onClick={() =>
+                      handlePresetSelect(
+                        key as keyof typeof presetConfigurations,
+                      )
+                    }
+                    style={{
+                      width: '100%',
+                      height: 'auto',
                       padding: '6px 8px',
                       textAlign: 'left',
                       border: '1px solid #d9d9d9',
-                      borderRadius: '4px'
+                      borderRadius: '4px',
                     }}
                     className="hover:border-blue-400 hover:bg-blue-50 transition-colors"
                   >
                     <div>
-                      <Text strong style={{ fontSize: '11px', display: 'block', lineHeight: '1.2' }}>{preset.name}</Text>
-                      <Text type="secondary" style={{ fontSize: '9px', lineHeight: '1.2' }}>{preset.description}</Text>
+                      <Text
+                        strong
+                        style={{
+                          fontSize: '11px',
+                          display: 'block',
+                          lineHeight: '1.2',
+                        }}
+                      >
+                        {preset.name}
+                      </Text>
+                      <Text
+                        type="secondary"
+                        style={{ fontSize: '9px', lineHeight: '1.2' }}
+                      >
+                        {preset.description}
+                      </Text>
                     </div>
                   </Button>
                 </Col>
@@ -188,16 +229,32 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = ({
 
           <div className="mt-6">
             {Object.entries(weights).map(([key, value]) => (
-              <Card key={key} size="small" className="mb-4" style={{ border: '1px solid #f0f0f0' }}>
+              <Card
+                key={key}
+                size="small"
+                className="mb-4"
+                style={{ border: '1px solid #f0f0f0' }}
+              >
                 <Row gutter={16} align="middle">
                   <Col span={7}>
-                    <Title level={5} style={{ margin: 0, fontSize: '14px', fontWeight: 600 }}>
-                      {key.split('_').map(word => 
-                        word.charAt(0).toUpperCase() + word.slice(1)
-                      ).join(' & ')}
+                    <Title
+                      level={5}
+                      style={{ margin: 0, fontSize: '14px', fontWeight: 600 }}
+                    >
+                      {key
+                        .split('_')
+                        .map(
+                          (word) =>
+                            word.charAt(0).toUpperCase() + word.slice(1),
+                        )
+                        .join(' & ')}
                     </Title>
                     <Text type="secondary" style={{ fontSize: '12px' }}>
-                      {weightDescriptions[key as keyof typeof weightDescriptions]}
+                      {
+                        weightDescriptions[
+                          key as keyof typeof weightDescriptions
+                        ]
+                      }
                     </Text>
                   </Col>
                   <Col span={14}>
@@ -205,7 +262,9 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = ({
                       min={0}
                       max={100}
                       value={value}
-                      onChange={(val) => handleUpdateWeights(key as keyof SupafundWeights, val)}
+                      onChange={(val) =>
+                        handleUpdateWeights(key as keyof SupafundWeights, val)
+                      }
                       marks={{
                         0: '0%',
                         25: '25%',
@@ -217,7 +276,13 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = ({
                     />
                   </Col>
                   <Col span={3} style={{ textAlign: 'center' }}>
-                    <Title level={4} style={{ margin: 0, color: value > 0 ? '#1890ff' : '#d9d9d9' }}>
+                    <Title
+                      level={4}
+                      style={{
+                        margin: 0,
+                        color: value > 0 ? '#1890ff' : '#d9d9d9',
+                      }}
+                    >
                       {value}%
                     </Title>
                   </Col>
@@ -226,24 +291,59 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = ({
             ))}
           </div>
 
-          <div className="mt-4 p-4" style={{ backgroundColor: isWeightValid ? '#f6ffed' : '#fff2e8', borderRadius: '8px', border: `1px solid ${isWeightValid ? '#b7eb8f' : '#ffd591'}` }}>
+          <div
+            className="mt-4 p-4"
+            style={{
+              backgroundColor: isWeightValid ? '#f6ffed' : '#fff2e8',
+              borderRadius: '8px',
+              border: `1px solid ${isWeightValid ? '#b7eb8f' : '#ffd591'}`,
+            }}
+          >
             <Row justify="space-between" align="middle" className="mb-2">
-              <Text style={{ color: isWeightValid ? '#52c41a' : '#fa8c16', fontWeight: 600, fontSize: '14px' }}>
+              <Text
+                style={{
+                  color: isWeightValid ? '#52c41a' : '#fa8c16',
+                  fontWeight: 600,
+                  fontSize: '14px',
+                }}
+              >
                 Total Weight: {totalWeight}%
               </Text>
-              <Text style={{ color: isWeightValid ? '#52c41a' : '#fa8c16', fontWeight: 500 }}>
-                {isWeightValid ? '✓ Perfect!' : `Need ${100 - totalWeight}% more`}
+              <Text
+                style={{
+                  color: isWeightValid ? '#52c41a' : '#fa8c16',
+                  fontWeight: 500,
+                }}
+              >
+                {isWeightValid
+                  ? '✓ Perfect!'
+                  : `Need ${100 - totalWeight}% more`}
               </Text>
             </Row>
             <Progress
               percent={totalWeight}
-              status={totalWeight === 100 ? 'success' : totalWeight > 100 ? 'exception' : 'active'}
-              strokeColor={totalWeight === 100 ? '#52c41a' : totalWeight > 100 ? '#ff4d4f' : '#1890ff'}
+              status={
+                totalWeight === 100
+                  ? 'success'
+                  : totalWeight > 100
+                    ? 'exception'
+                    : 'active'
+              }
+              strokeColor={
+                totalWeight === 100
+                  ? '#52c41a'
+                  : totalWeight > 100
+                    ? '#ff4d4f'
+                    : '#1890ff'
+              }
               showInfo={false}
               strokeWidth={8}
             />
             {totalWeight > 100 && (
-              <Text type="danger" style={{ fontSize: '12px', display: 'block', marginTop: '4px' }}>
+              <Text
+                type="danger"
+                style={{ fontSize: '12px', display: 'block', marginTop: '4px' }}
+              >
                 Total exceeds 100%. Please reduce some weights.
               </Text>
             )}
@@ -253,9 +353,9 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = ({
         <Card className="mb-4">
           <Title level={5}>Advanced Settings</Title>
           <Text type="secondary" className="mb-4 block">
-            Fine-tune your agent's trading behavior and risk parameters.
+            Fine-tune your agent&apos;s trading behavior and risk parameters.
           </Text>
-          
+
           <Form.Item
             name="apiEndpoint"
             label={<Text strong>Supafund API Endpoint</Text>}
@@ -270,9 +370,12 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = ({
           </Form.Item>
 
           <div className="mb-6">
-            <Text strong className="block mb-2">Minimum Edge Threshold: {minEdgeThreshold}%</Text>
+            <Text strong className="block mb-2">
+              Minimum Edge Threshold: {minEdgeThreshold}%
+            </Text>
             <Text type="secondary" className="block mb-3">
-              Your agent will only place bets when it has at least this percentage advantage
+              Your agent will only place bets when it has at least this
+              percentage advantage
             </Text>
             <Slider
               min={1}
@@ -291,9 +394,12 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = ({
           </div>
 
           <div className="mb-4">
-            <Text strong className="block mb-2">Risk Tolerance: {riskTolerance}/10</Text>
+            <Text strong className="block mb-2">
+              Risk Tolerance: {riskTolerance}/10
+            </Text>
             <Text type="secondary" className="block mb-3">
-              Higher values mean larger position sizes and more aggressive trading
+              Higher values mean larger position sizes and more aggressive
+              trading
             </Text>
             <Slider
               min={1}
@@ -302,15 +408,29 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = ({
               onChange={setRiskTolerance}
               marks={{
                 1: 'Very Conservative',
-                3: 'Conservative', 
+                3: 'Conservative',
                 5: 'Moderate',
                 7: 'Aggressive',
                 10: 'Very Aggressive',
               }}
-              tooltip={{ formatter: (val) => {
-                const levels = ['', 'Very Conservative', 'Conservative', 'Conservative', 'Moderate', 'Moderate', 'Moderate', 'Aggressive', 'Aggressive', 'Very Aggressive', 'Very Aggressive'];
-                return levels[val];
-              }}}
+              tooltip={{
+                formatter: (val) => {
+                  const levels = [
+                    '',
+                    'Very Conservative',
+                    'Conservative',
+                    'Conservative',
+                    'Moderate',
+                    'Moderate',
+                    'Moderate',
+                    'Aggressive',
+                    'Aggressive',
+                    'Very Aggressive',
+                    'Very Aggressive',
+                  ];
+                  return levels[val || 0];
+                },
+              }}
             />
           </div>
         </Card>

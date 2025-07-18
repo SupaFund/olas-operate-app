@@ -1,6 +1,6 @@
 import { Badge } from 'antd';
-import { useLottie } from 'lottie-react';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { MiddlewareDeploymentStatus } from '@/client';
@@ -28,13 +28,36 @@ const TransitionalAgentHead = () => (
 );
 
 const DeployedAgentHead = () => {
-  const { View } = useLottie({
-    animationData: require('../../ui/animations/robot-running.json'),
-    loop: true,
-    autoplay: true,
-  });
+  const [isMounted, setIsMounted] = useState(false);
+  const [lottieView, setLottieView] = useState<React.ReactNode>(null);
+  
+  useEffect(() => {
+    setIsMounted(true);
+    // Only import and use lottie on client side
+    import('lottie-react').then(({ useLottie }) => {
+      const animationData = require('../../ui/animations/robot-running.json');
+      // This is a hack but necessary for client-side only rendering
+      const LottieComponent = () => {
+        const { View } = useLottie({
+          animationData,
+          loop: true,
+          autoplay: true,
+        });
+        return View;
+      };
+      setLottieView(<LottieComponent />);
+    });
+  }, []);
 
-  return <AnimationContainer>{View}</AnimationContainer>;
+  if (!isMounted || !lottieView) {
+    return (
+      <AnimationContainer>
+        <Image src="/happy-robot.svg" alt="Happy Robot" width={40} height={40} />
+      </AnimationContainer>
+    );
+  }
+
+  return <AnimationContainer>{lottieView}</AnimationContainer>;
 };
 
 const StoppedAgentHead = () => (

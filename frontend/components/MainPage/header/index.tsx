@@ -13,6 +13,7 @@ import { AgentButton } from './AgentButton/AgentButton';
 import { AgentHead } from './AgentHead';
 import { AgentProfileButton } from './AgentProfileButton';
 import { AgentSettingsButton } from './AgentSettingsButton';
+import { SupafundDashboardButton } from './SupafundDashboardButton';
 
 const useSetupTrayIcon = () => {
   const { isLowBalance } = useBalanceContext();
@@ -51,6 +52,7 @@ export const MainHeader = () => {
       </Flex>
 
       <Flex gap={8} align="center">
+        <SupafundDashboardButton />
         <AgentSettingsButton />
         <AgentProfileButton />
       </Flex>

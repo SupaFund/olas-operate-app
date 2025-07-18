@@ -16,6 +16,8 @@ export const Pages = {
   AddFundsToMasterSafeThroughBridge: 'AddFundsToMasterSafeThroughBridge',
   LowOperatingBalanceBridgeFunds: 'LowOperatingBalanceBridgeFunds',
   LowSafeSignerBalanceBridgeFunds: 'LowSafeSignerBalanceBridgeFunds',
+  SupafundDashboard: 'SupafundDashboard',
+  SupafundConfiguration: 'SupafundConfiguration',
 } as const;
 
 export type Pages = (typeof Pages)[keyof typeof Pages];

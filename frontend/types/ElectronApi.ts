@@ -24,6 +24,7 @@ export type ElectronStore = {
   [AgentType.Optimus]?: AgentSettings & {
     isProfileWarningDisplayed: boolean;
   };
+  [AgentType.Supafund]?: AgentSettings;
 };
 
 export type ElectronTrayIconStatus =

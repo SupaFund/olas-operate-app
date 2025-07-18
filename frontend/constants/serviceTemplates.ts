@@ -8,7 +8,8 @@ import { TokenSymbol } from '@/enums/Token';
 import { parseEther, parseUnits } from '@/utils/numberFormatters';
 
 // Use DEV_RPC or fallback to localhost for development
-const DEFAULT_RPC = process.env.DEV_RPC || process.env.GNOSIS_RPC || 'http://localhost:8545';
+const DEFAULT_RPC =
+  process.env.DEV_RPC || process.env.GNOSIS_RPC || 'http://localhost:8545';
 
 /**
  * Prefix for KPI description in service templates.
@@ -594,8 +595,10 @@ export const SUPAFUND_SERVICE_TEMPLATE: ServiceTemplate = {
     // Add Supafund-specific environment variables
     SUPAFUND_WEIGHTS: {
       name: 'Supafund agent weights configuration',
-      description: 'JSON string with weights for: founder_team, market_opportunity, technical_analysis, social_sentiment, tokenomics',
-      value: '{"founder_team":20,"market_opportunity":20,"technical_analysis":20,"social_sentiment":20,"tokenomics":20}',
+      description:
+        'JSON string with weights for: founder_team, market_opportunity, technical_analysis, social_sentiment, tokenomics',
+      value:
+        '{"founder_team":20,"market_opportunity":20,"technical_analysis":20,"social_sentiment":20,"tokenomics":20}',
       provision_type: EnvProvisionType.USER,
     },
     SUPAFUND_API_ENDPOINT: {

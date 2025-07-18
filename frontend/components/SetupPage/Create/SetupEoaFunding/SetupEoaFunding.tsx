@@ -297,7 +297,7 @@ export const SetupEoaFunding = () => {
           currency={currentFundingRequirements.nativeToken.symbol}
           chainName={currentFundingRequirements.name}
         />
-        
+
         {/* Debug Skip Button - Only visible in development */}
         {process.env.NODE_ENV === 'development' && (
           <CardFlex $noBorder className="mt-8">
@@ -308,9 +308,9 @@ export const SetupEoaFunding = () => {
               description={
                 <Flex vertical gap={8}>
                   <Text>Skip funding for development/debugging purposes.</Text>
-                  <Button 
-                    type="dashed" 
-                    danger 
+                  <Button
+                    type="dashed"
+                    danger
                     block
                     onClick={() => goto(SetupScreen.SetupCreateSafe)}
                   >
@@ -371,7 +371,7 @@ export const SetupEoaFunding = () => {
           </Button>
         </CardSection>
       )}
-      
+
       {/* Debug Skip Button - Only visible in development */}
       {process.env.NODE_ENV === 'development' && (
         <CardSection $padding="0px 24px" className="mt-16">
@@ -382,9 +382,9 @@ export const SetupEoaFunding = () => {
             description={
               <Flex vertical gap={8}>
                 <Text>Skip funding for development/debugging purposes.</Text>
-                <Button 
-                  type="dashed" 
-                  danger 
+                <Button
+                  type="dashed"
+                  danger
                   block
                   onClick={() => goto(SetupScreen.SetupCreateSafe)}
                 >
