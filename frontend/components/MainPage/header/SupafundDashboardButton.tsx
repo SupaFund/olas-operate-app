@@ -1,4 +1,4 @@
-import { DashboardOutlined } from '@ant-design/icons';
+import { SettingOutlined } from '@ant-design/icons';
 import { Button, Tooltip, Typography } from 'antd';
 
 import { AgentType } from '@/enums/Agent';
@@ -8,7 +8,7 @@ import { useServices } from '@/hooks/useServices';
 
 const { Text } = Typography;
 
-export const SupafundDashboardButton = () => {
+export const SupafundSettingsButton = () => {
   const { goto } = usePageState();
   const { selectedAgentType } = useServices();
 
@@ -16,7 +16,7 @@ export const SupafundDashboardButton = () => {
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    goto(Pages.SupafundDashboard);
+    goto(Pages.SupafundMainSettings);
   };
 
   if (!isSupafundAgent) {
@@ -26,7 +26,7 @@ export const SupafundDashboardButton = () => {
   return (
     <Tooltip
       arrow={false}
-      title={<Text className="text-sm">View Supafund Dashboard</Text>}
+      title={<Text className="text-sm">Supafund Agent Settings</Text>}
       overlayInnerStyle={{ width: 'max-content' }}
       placement="bottomLeft"
     >
@@ -34,7 +34,7 @@ export const SupafundDashboardButton = () => {
         type="default"
         size="large"
         onClick={handleClick}
-        icon={<DashboardOutlined />}
+        icon={<SettingOutlined />}
       />
     </Tooltip>
   );

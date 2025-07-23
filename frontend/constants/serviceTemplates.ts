@@ -564,10 +564,10 @@ export const OPTIMUS_SERVICE_TEMPLATE: ServiceTemplate = {
 export const SUPAFUND_SERVICE_TEMPLATE: ServiceTemplate = {
   agentType: AgentType.Supafund,
   name: 'Supafund Agent',
-  hash: 'bafybeievvf3663md525u2khoxjlufgp6hsf6vf6kah4xqckksj5nmtkg5q', // TODO: Replace with actual Supafund service hash
+  hash: 'bafybeidavcdl5mex7ykrf4fytngrpgejp3oqdllqrj2uvj6vm4qlkqrklu', // TODO: Replace with actual Supafund service hash
   description: `${KPI_DESC_PREFIX} Predicts whether emerging projects will achieve key milestones, providing detailed AI-powered analysis`,
   image:
-    'https://operate.olas.network/_next/image?url=%2Fimages%2Fprediction-agent.png&w=3840&q=75', // TODO: Replace with Supafund image
+    'https://www.supafund.xyz/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flight.71a38e21.png&w=64&q=75', // TODO: Replace with Supafund image
   service_version: 'v0.1.0',
   home_chain: MiddlewareChain.GNOSIS,
   configurations: {

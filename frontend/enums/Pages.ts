@@ -18,6 +18,7 @@ export const Pages = {
   LowSafeSignerBalanceBridgeFunds: 'LowSafeSignerBalanceBridgeFunds',
   SupafundDashboard: 'SupafundDashboard',
   SupafundConfiguration: 'SupafundConfiguration',
+  SupafundMainSettings: 'SupafundMainSettings',
 } as const;
 
 export type Pages = (typeof Pages)[keyof typeof Pages];

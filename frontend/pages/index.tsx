@@ -14,6 +14,7 @@ import { Settings } from '@/components/SettingsPage';
 import { Setup } from '@/components/SetupPage';
 import { SupafundConfiguration } from '@/components/SupafundConfiguration';
 import { SupafundDashboard } from '@/components/SupafundDashboard';
+import { SupafundMainSettings } from '@/components/SupafundMainSettings';
 import { UpdateAgentPage } from '@/components/UpdateAgentPage';
 import { YourWalletPage } from '@/components/YourWalletPage';
 import { Pages } from '@/enums/Pages';
@@ -79,6 +80,8 @@ export default function Home() {
         return <SupafundDashboard />;
       case Pages.SupafundConfiguration:
         return <SupafundConfiguration />;
+      case Pages.SupafundMainSettings:
+        return <SupafundMainSettings />;
 
       // bridge pages
       case Pages.AddFundsToMasterSafeThroughBridge:

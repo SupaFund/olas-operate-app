@@ -1,9 +1,10 @@
 import { Badge } from 'antd';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 import { MiddlewareDeploymentStatus } from '@/client';
+import { AgentType } from '@/enums/Agent';
 import { useRewardContext } from '@/hooks/useRewardContext';
 import { useServices } from '@/hooks/useServices';
 
@@ -21,13 +22,18 @@ const AnimationContainer = styled.div`
   }
 `;
 
-const TransitionalAgentHead = () => (
+const TransitionalAgentHead = ({ isSupafund }: { isSupafund: boolean }) => (
   <Badge status="processing" color="orange" dot offset={badgeOffset}>
-    <Image src="/happy-robot.svg" alt="Happy Robot" width={40} height={40} />
+    <Image 
+      src={isSupafund ? "/supafund-robot.svg" : "/happy-robot.svg"} 
+      alt={isSupafund ? "Supafund Robot" : "Happy Robot"} 
+      width={40} 
+      height={40} 
+    />
   </Badge>
 );
 
-const DeployedAgentHead = () => {
+const DeployedAgentHead = ({ isSupafund }: { isSupafund: boolean }) => {
   const [isMounted, setIsMounted] = useState(false);
   const [lottieView, setLottieView] = useState<React.ReactNode>(null);
   
@@ -52,7 +58,21 @@ const DeployedAgentHead = () => {
   if (!isMounted || !lottieView) {
     return (
       <AnimationContainer>
-        <Image src="/happy-robot.svg" alt="Happy Robot" width={40} height={40} />
+        <Image 
+          src={isSupafund ? "/supafund-robot.svg" : "/happy-robot.svg"} 
+          alt={isSupafund ? "Supafund Robot" : "Happy Robot"} 
+          width={40} 
+          height={40} 
+        />
+      </AnimationContainer>
+    );
+  }
+
+  // For now, use static image for Supafund, animation for others
+  if (isSupafund) {
+    return (
+      <AnimationContainer>
+        <Image src="/supafund-robot.svg" alt="Supafund Robot" width={40} height={40} />
       </AnimationContainer>
     );
   }
@@ -60,33 +80,52 @@ const DeployedAgentHead = () => {
   return <AnimationContainer>{lottieView}</AnimationContainer>;
 };
 
-const StoppedAgentHead = () => (
+const StoppedAgentHead = ({ isSupafund }: { isSupafund: boolean }) => (
   <Badge dot color="red" offset={badgeOffset}>
-    <Image src="/sad-robot.svg" alt="Sad Robot" width={40} height={40} />
+    <Image 
+      src={isSupafund ? "/supafund-robot.svg" : "/sad-robot.svg"} 
+      alt={isSupafund ? "Supafund Robot" : "Sad Robot"} 
+      width={40} 
+      height={40} 
+    />
   </Badge>
 );
 
-const IdleAgentHead = () => (
+const IdleAgentHead = ({ isSupafund }: { isSupafund: boolean }) => (
   <Badge dot status="processing" color="green" offset={badgeOffset}>
-    <Image src="/idle-robot.svg" alt="Idle Robot" width={40} height={40} />
+    <Image 
+      src={isSupafund ? "/supafund-robot.svg" : "/idle-robot.svg"} 
+      alt={isSupafund ? "Supafund Robot" : "Idle Robot"} 
+      width={40} 
+      height={40} 
+    />
   </Badge>
 );
 
 export const AgentHead = () => {
-  const { selectedService } = useServices();
+  const { selectedService, selectedAgentType } = useServices();
   const { isEligibleForRewards } = useRewardContext();
   const status = selectedService?.deploymentStatus;
+
+  const isSupafund = useMemo(
+    () => selectedAgentType === AgentType.Supafund,
+    [selectedAgentType],
+  );
 
   if (
     status === MiddlewareDeploymentStatus.DEPLOYING ||
     status === MiddlewareDeploymentStatus.STOPPING
   ) {
-    return <TransitionalAgentHead />;
+    return <TransitionalAgentHead isSupafund={isSupafund} />;
   }
 
   if (status === MiddlewareDeploymentStatus.DEPLOYED) {
     // If the agent is eligible for rewards, agent is idle
-    return isEligibleForRewards ? <IdleAgentHead /> : <DeployedAgentHead />;
+    return isEligibleForRewards ? (
+      <IdleAgentHead isSupafund={isSupafund} />
+    ) : (
+      <DeployedAgentHead isSupafund={isSupafund} />
+    );
   }
-  return <StoppedAgentHead />;
+  return <StoppedAgentHead isSupafund={isSupafund} />;
 };

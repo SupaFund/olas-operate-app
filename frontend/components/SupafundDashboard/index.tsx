@@ -19,7 +19,11 @@ import { useSupafundData } from './hooks/useSupafundData';
 const { Title } = Typography;
 const { TabPane } = Tabs;
 
-export const SupafundDashboard = () => {
+interface SupafundDashboardProps {
+  hideBackButton?: boolean;
+}
+
+export const SupafundDashboard = ({ hideBackButton = false }: SupafundDashboardProps) => {
   const { goto } = usePageState();
   const { selectedAgentConfig, selectedAgentType } = useServices();
   const { metrics, opportunities, positions, activities, isLoading } =
@@ -48,17 +52,19 @@ export const SupafundDashboard = () => {
 
   return (
     <CardFlex>
-      <Row gutter={16} style={{ marginBottom: '16px' }}>
-        <Col span={24}>
-          <Button
-            icon={<ArrowLeftOutlined />}
-            onClick={() => goto(Pages.Main)}
-            style={{ marginBottom: '16px' }}
-          >
-            Back to Main
-          </Button>
-        </Col>
-      </Row>
+      {!hideBackButton && (
+        <Row gutter={16} style={{ marginBottom: '16px' }}>
+          <Col span={24}>
+            <Button
+              icon={<ArrowLeftOutlined />}
+              onClick={() => goto(Pages.Main)}
+              style={{ marginBottom: '16px' }}
+            >
+              Back to Main
+            </Button>
+          </Col>
+        </Row>
+      )}
 
       <DashboardHeader
         agentName={selectedAgentConfig.displayName}
