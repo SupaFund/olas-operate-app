@@ -20,34 +20,37 @@ export const MetricsSection: React.FC<MetricsSectionProps> = ({ metrics }) => {
   const profitLossColor = metrics.totalProfitLoss >= 0 ? '#3f8600' : '#cf1322';
 
   return (
-    <Row gutter={16}>
-      <Col xs={24} sm={12} md={8} lg={6}>
-        <Card>
+    <Row gutter={[8, 8]}>
+      {/* Top row - Main P&L metric */}
+      <Col xs={24}>
+        <Card size="small">
           <Statistic
             title="Total Profit/Loss"
             value={metrics.totalProfitLoss}
             precision={2}
-            valueStyle={{ color: profitLossColor }}
+            valueStyle={{ color: profitLossColor, fontSize: '24px' }}
             prefix="$"
             suffix={
-              <span style={{ fontSize: '14px', marginLeft: '8px' }}>
-                ({metrics.totalProfitLossPercentage.toFixed(2)}%)
+              <span style={{ fontSize: '14px', marginLeft: '8px', color: profitLossColor }}>
+                ({metrics.totalProfitLossPercentage.toFixed(1)}%)
               </span>
             }
           />
         </Card>
       </Col>
-      <Col xs={24} sm={12} md={8} lg={6}>
-        <Card>
+      
+      {/* Second row - Two key metrics */}
+      <Col xs={12}>
+        <Card size="small">
           <Statistic
             title="Active Positions"
             value={metrics.activePositions}
-            valueStyle={{ color: '#1890ff' }}
+            valueStyle={{ color: '#1890ff', fontSize: '20px' }}
           />
         </Card>
       </Col>
-      <Col xs={24} sm={12} md={8} lg={6}>
-        <Card>
+      <Col xs={12}>
+        <Card size="small">
           <Statistic
             title="Win Rate"
             value={metrics.winRate}
@@ -55,37 +58,42 @@ export const MetricsSection: React.FC<MetricsSectionProps> = ({ metrics }) => {
             suffix="%"
             valueStyle={{
               color: metrics.winRate >= 50 ? '#3f8600' : '#cf1322',
+              fontSize: '20px'
             }}
           />
         </Card>
       </Col>
-      <Col xs={24} sm={12} md={8} lg={6}>
-        <Card>
-          <div>
-            <Text type="secondary">Weekly</Text>
-            <Statistic
-              value={metrics.weeklyPerformance}
-              precision={2}
-              valueStyle={{
+      
+      {/* Third row - Performance metrics */}
+      <Col xs={12}>
+        <Card size="small">
+          <div style={{ textAlign: 'center' }}>
+            <Text type="secondary" style={{ fontSize: '12px', display: 'block' }}>Weekly</Text>
+            <Text 
+              style={{
                 color: metrics.weeklyPerformance >= 0 ? '#3f8600' : '#cf1322',
-                fontSize: '20px',
+                fontSize: '18px',
+                fontWeight: 'bold'
               }}
-              prefix={metrics.weeklyPerformance >= 0 ? '+' : ''}
-              suffix="%"
-            />
+            >
+              {metrics.weeklyPerformance >= 0 ? '+' : ''}{metrics.weeklyPerformance.toFixed(1)}%
+            </Text>
           </div>
-          <div style={{ marginTop: '8px' }}>
-            <Text type="secondary">Monthly</Text>
-            <Statistic
-              value={metrics.monthlyPerformance}
-              precision={2}
-              valueStyle={{
+        </Card>
+      </Col>
+      <Col xs={12}>
+        <Card size="small">
+          <div style={{ textAlign: 'center' }}>
+            <Text type="secondary" style={{ fontSize: '12px', display: 'block' }}>Monthly</Text>
+            <Text 
+              style={{
                 color: metrics.monthlyPerformance >= 0 ? '#3f8600' : '#cf1322',
-                fontSize: '20px',
+                fontSize: '18px',
+                fontWeight: 'bold'
               }}
-              prefix={metrics.monthlyPerformance >= 0 ? '+' : ''}
-              suffix="%"
-            />
+            >
+              {metrics.monthlyPerformance >= 0 ? '+' : ''}{metrics.monthlyPerformance.toFixed(1)}%
+            </Text>
           </div>
         </Card>
       </Col>

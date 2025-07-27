@@ -1,4 +1,4 @@
-import { SettingOutlined } from '@ant-design/icons';
+import { ControlOutlined } from '@ant-design/icons';
 import { Button, Card, Space, Typography } from 'antd';
 import React from 'react';
 
@@ -31,9 +31,11 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           </Text>
         </div>
         <Space>
-          <Button icon={<SettingOutlined />} onClick={onConfigClick}>
-            Configuration
-          </Button>
+          <Button 
+            icon={<ControlOutlined />} 
+            onClick={onConfigClick}
+            title="Configuration"
+          />
         </Space>
       </div>
     </Card>

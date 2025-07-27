@@ -58,46 +58,54 @@ export const OpportunitiesTab: React.FC<OpportunitiesTabProps> = ({
   }
 
   return (
-    <Row gutter={[16, 16]}>
+    <Row gutter={[12, 12]}>
       {opportunities.map((opportunity) => (
-        <Col xs={24} sm={12} md={8} key={opportunity.id}>
+        <Col xs={24} key={opportunity.id}>
           <Card
             hoverable
-            style={{ height: '100%' }}
-            actions={[
-              <Button type="link" icon={<InfoCircleOutlined />} key="analyze">
-                View Analysis
-              </Button>,
-            ]}
+            size="small"
+            style={{ width: '100%' }}
           >
-            <Badge.Ribbon
-              text={`${opportunity.edge}% Edge`}
-              color={opportunity.edge > 10 ? 'green' : 'blue'}
-            >
-              <div style={{ paddingRight: '20px' }}>
-                <Title level={5} ellipsis={{ rows: 2 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {/* Header with edge badge */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <Title 
+                  level={5} 
+                  style={{ margin: 0, fontSize: '14px', flex: 1, marginRight: '8px' }}
+                  ellipsis={{ rows: 2, tooltip: opportunity.title }}
+                >
                   {opportunity.title}
                 </Title>
-                <Space
-                  direction="vertical"
-                  size="small"
-                  style={{ width: '100%' }}
-                >
-                  <div>
-                    <Tag color={getDirectionColor(opportunity.direction)}>
-                      {opportunity.direction}
-                    </Tag>
-                    <Tag color={getConfidenceColor(opportunity.confidence)}>
-                      {opportunity.confidence} Confidence
-                    </Tag>
-                  </div>
-                  <Text type="secondary">{opportunity.category}</Text>
-                  <Text type="secondary" style={{ fontSize: '12px' }}>
-                    Expires in {opportunity.expiresIn}
-                  </Text>
-                </Space>
+                <Tag color={opportunity.edge > 10 ? 'green' : 'blue'} style={{ margin: 0, fontSize: '11px' }}>
+                  {opportunity.edge}% Edge
+                </Tag>
               </div>
-            </Badge.Ribbon>
+              
+              {/* Tags and category */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
+                <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                  <Tag color={getDirectionColor(opportunity.direction)} style={{ margin: 0, fontSize: '11px' }}>
+                    {opportunity.direction}
+                  </Tag>
+                  <Tag color={getConfidenceColor(opportunity.confidence)} style={{ margin: 0, fontSize: '11px' }}>
+                    {opportunity.confidence}
+                  </Tag>
+                </div>
+                <Text type="secondary" style={{ fontSize: '11px' }}>
+                  {opportunity.category}
+                </Text>
+              </div>
+              
+              {/* Footer with expiry and action */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Text type="secondary" style={{ fontSize: '11px' }}>
+                  Expires in {opportunity.expiresIn}
+                </Text>
+                <Button type="link" icon={<InfoCircleOutlined />} size="small" style={{ padding: '0 4px', fontSize: '11px' }}>
+                  View
+                </Button>
+              </div>
+            </div>
           </Card>
         </Col>
       ))}

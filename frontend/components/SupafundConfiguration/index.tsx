@@ -117,7 +117,7 @@ export const SupafundConfiguration = () => {
 
       // Navigate back to dashboard after saving
       setTimeout(() => {
-        goto(Pages.SupafundDashboard);
+        goto(Pages.Main);
       }, 1000);
     } catch (error) {
       message.error('Failed to save configuration');
@@ -155,7 +155,7 @@ export const SupafundConfiguration = () => {
         <Col span={24}>
           <Button
             icon={<ArrowLeftOutlined />}
-            onClick={() => goto(Pages.SupafundDashboard)}
+            onClick={() => goto(Pages.Main)}
           >
             Back to Dashboard
           </Button>
@@ -287,7 +287,7 @@ export const SupafundConfiguration = () => {
               </Button>
               <Button
                 size="large"
-                onClick={() => goto(Pages.SupafundDashboard)}
+                onClick={() => goto(Pages.Main)}
               >
                 Cancel
               </Button>

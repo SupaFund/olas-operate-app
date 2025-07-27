@@ -1,51 +1,65 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-interface Metrics {
-  totalProfitLoss: number;
-  totalProfitLossPercentage: number;
-  activePositions: number;
-  winRate: number;
-  weeklyPerformance: number;
-  monthlyPerformance: number;
-}
+import { EvmChainId } from '@/enums/Chain';
+import { WalletType } from '@/enums/Wallet';
+import { useServices } from '@/hooks/useServices';
+import { useMasterWalletContext } from '@/hooks/useWallet';
+import {
+  calculateMetricsFromTrades,
+  processMarketOpportunities,
+  processTradeActivities,
+  processUserPositions,
+  ProcessedActivity,
+  ProcessedMetrics,
+  ProcessedOpportunity,
+  ProcessedPosition,
+} from '@/utils/supafundDataProcessor';
+import {
+  fetchTraderHealthStatus,
+  queryMarketOpportunities,
+  queryUserPositions,
+  queryUserTrades,
+} from '@/utils/supafundSubgraph';
 
-interface Opportunity {
-  id: string;
-  title: string;
-  edge: number;
-  confidence: 'HIGH' | 'MEDIUM' | 'LOW';
-  direction: 'YES' | 'NO';
-  category: string;
-  expiresIn: string;
-}
+// Legacy interfaces for backward compatibility
+interface Metrics extends ProcessedMetrics {}
+interface Opportunity extends ProcessedOpportunity {}
+interface Position extends ProcessedPosition {}
+interface Activity extends ProcessedActivity {}
 
-interface Position {
-  id: string;
-  market: string;
-  direction: 'YES' | 'NO';
-  entryPrice: number;
-  currentPrice: number;
-  size: number;
-  pnl: number;
-  pnlPercentage: number;
-  timeRemaining: string;
-  status: 'OPEN' | 'CLOSED' | 'PENDING';
-}
-
-interface Activity {
-  id: string;
-  type: 'POSITION_OPENED' | 'POSITION_CLOSED' | 'MARKET_ANALYSIS';
-  title: string;
-  description: string;
-  timestamp: string;
-  result?: {
-    pnl?: number;
-    confidence?: string;
-  };
-}
+// 获取实际用于交易的地址 - 优先使用 service wallets
+const getTradingAddress = (masterSafes: any[], serviceWallets: any[]): string | null => {
+  // 优先尝试使用 service wallets (agent 实际交易地址)
+  const gnosisServiceWallet = serviceWallets?.find(
+    (wallet) => wallet.type === WalletType.Safe && 
+                 'evmChainId' in wallet && 
+                 wallet.evmChainId === EvmChainId.Gnosis
+  );
+  
+  if (gnosisServiceWallet?.address) {
+    console.log('🎯 Using service wallet for trading:', gnosisServiceWallet.address);
+    return gnosisServiceWallet.address;
+  }
+  
+  // 回退到 master safe
+  const masterSafe = masterSafes?.find(
+    (safe) => safe.evmChainId === EvmChainId.Gnosis
+  );
+  
+  if (masterSafe?.address) {
+    console.log('🎯 Using master safe for trading:', masterSafe.address);
+    return masterSafe.address;
+  }
+  
+  console.warn('❌ No trading address found');
+  return null;
+};
 
 export const useSupafundData = () => {
+  const { masterSafes } = useMasterWalletContext();
+  const { serviceWallets } = useServices();
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [metrics, setMetrics] = useState<Metrics>({
     totalProfitLoss: 0,
     totalProfitLossPercentage: 0,
@@ -58,121 +72,80 @@ export const useSupafundData = () => {
   const [positions, setPositions] = useState<Position[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
 
-  // Mock data for demonstration
-  const loadMockData = () => {
-    setMetrics({
-      totalProfitLoss: 1250.5,
-      totalProfitLossPercentage: 12.5,
-      activePositions: 3,
-      winRate: 68.5,
-      weeklyPerformance: 5.2,
-      monthlyPerformance: 15.8,
-    });
+  // 获取真实数据
+  const loadRealData = useCallback(async () => {
+    // 获取交易地址 - 优先使用 service wallet
+    const tradingAddress = getTradingAddress(masterSafes || [], serviceWallets || []);
+    
+    if (!tradingAddress) {
+      setError('No trading address found');
+      setIsLoading(false);
+      return;
+    }
 
-    setOpportunities([
-      {
-        id: '1',
-        title: 'Will Worldcoin reach 100M users by Q2 2025?',
-        edge: 15,
-        confidence: 'HIGH',
-        direction: 'YES',
-        category: 'User Growth',
-        expiresIn: '2 days',
-      },
-      {
-        id: '2',
-        title: 'Will Farcaster protocol integrate with Lens?',
-        edge: 8,
-        confidence: 'MEDIUM',
-        direction: 'NO',
-        category: 'Integration',
-        expiresIn: '5 days',
-      },
-      {
-        id: '3',
-        title: 'Will zkSync Era TVL exceed $1B?',
-        edge: 12,
-        confidence: 'HIGH',
-        direction: 'YES',
-        category: 'DeFi',
-        expiresIn: '1 week',
-      },
-    ]);
+    try {
+      setError(null);
+      setIsLoading(true);
 
-    setPositions([
-      {
-        id: '1',
-        market: 'Will Optimism token reach $5?',
-        direction: 'YES',
-        entryPrice: 0.45,
-        currentPrice: 0.52,
-        size: 1000,
-        pnl: 70,
-        pnlPercentage: 15.56,
-        timeRemaining: '3 days',
-        status: 'OPEN',
-      },
-      {
-        id: '2',
-        market: 'Will Base network reach 1M daily transactions?',
-        direction: 'YES',
-        entryPrice: 0.3,
-        currentPrice: 0.28,
-        size: 500,
-        pnl: -10,
-        pnlPercentage: -6.67,
-        timeRemaining: '5 days',
-        status: 'OPEN',
-      },
-    ]);
+      console.log(`🎯 Using trading address: ${tradingAddress}`);
 
-    setActivities([
-      {
-        id: '1',
-        type: 'POSITION_OPENED',
-        title: 'Opened position on Optimism price',
-        description: 'Bought YES shares at $0.45 based on technical analysis',
-        timestamp: '2 hours ago',
-      },
-      {
-        id: '2',
-        type: 'MARKET_ANALYSIS',
-        title: 'Analyzed Base network growth',
-        description: 'High confidence in transaction volume increase',
-        timestamp: '4 hours ago',
-        result: {
-          confidence: 'HIGH',
-        },
-      },
-      {
-        id: '3',
-        type: 'POSITION_CLOSED',
-        title: 'Closed position on Arbitrum TVL',
-        description: 'Sold YES shares at profit',
-        timestamp: '1 day ago',
-        result: {
-          pnl: 150.25,
-        },
-      },
-    ]);
+      // 并行获取所有数据
+      const [tradesData, marketsData, positionsData, traderStatus] =
+        await Promise.all([
+          queryUserTrades(tradingAddress),
+          queryMarketOpportunities(),
+          queryUserPositions(tradingAddress),
+          fetchTraderHealthStatus(),
+        ]);
 
-    setIsLoading(false);
-  };
+      // 处理和计算数据
+      const calculatedMetrics = calculateMetricsFromTrades(tradesData);
+      const processedOpportunities = processMarketOpportunities(marketsData);
+      const processedPositions = processUserPositions(
+        positionsData,
+        tradesData,
+      );
+      const processedActivities = processTradeActivities(tradesData);
+
+      // 更新状态
+      setMetrics(calculatedMetrics);
+      setOpportunities(processedOpportunities);
+      setPositions(processedPositions);
+      setActivities(processedActivities);
+
+      // trades: tradesData.length,
+      // markets: marketsData.length,
+      // positions: positionsData.length,
+      // traderActive: traderStatus.isActive,
+      // });
+
+    } catch (error) {
+      console.error('Failed to load Supafund data:', error);
+      setError('Failed to load trading data');
+      
+      // 如果获取真实数据失败，显示空状态而不是模拟数据
+      setMetrics({
+        totalProfitLoss: 0,
+        totalProfitLossPercentage: 0,
+        activePositions: 0,
+        winRate: 0,
+        weeklyPerformance: 0,
+        monthlyPerformance: 0,
+      });
+      setOpportunities([]);
+      setPositions([]);
+      setActivities([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [masterSafes, serviceWallets]);
 
   useEffect(() => {
-    // Simulate loading data
-    const timer = setTimeout(() => {
-      loadMockData();
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
+    loadRealData();
+  }, [loadRealData]);
 
   const refetch = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      loadMockData();
-    }, 500);
+    loadRealData();
   };
 
   return {
@@ -181,6 +154,7 @@ export const useSupafundData = () => {
     positions,
     activities,
     isLoading,
+    error,
     refetch,
   };
 };

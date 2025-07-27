@@ -14,6 +14,7 @@ import { AgentHead } from './AgentHead';
 import { AgentProfileButton } from './AgentProfileButton';
 import { AgentSettingsButton } from './AgentSettingsButton';
 import { SupafundSettingsButton } from './SupafundDashboardButton';
+import { SwitchAgentButton } from './SwitchAgentButton';
 
 const useSetupTrayIcon = () => {
   const { isLowBalance } = useBalanceContext();
@@ -48,6 +49,7 @@ export const MainHeader = () => {
       <Flex justify="start" align="center" gap={8}>
         <AgentHead />
         <AgentButton />
+        <SwitchAgentButton />
         <FirstRunModal open={isFirstRunModalOpen} onClose={handleModalClose} />
       </Flex>
 

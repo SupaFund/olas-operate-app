@@ -613,6 +613,12 @@ export const SUPAFUND_SERVICE_TEMPLATE: ServiceTemplate = {
       value: '["0x89c5cc945dd550BcFfb72Fe42BfF002429F46Fec"]', // TODO: Replace with actual Supafund creator addresses
       provision_type: EnvProvisionType.FIXED,
     },
+    CREATOR_PER_SUBGRAPH: {
+      name: 'Market creators per subgraph',
+      description: 'JSON mapping of subgraph names to creator addresses',
+      value: '{"omen_subgraph":["0x92F869018B5F954a4197a15feb951CF9260c54a8"]}',
+      provision_type: EnvProvisionType.FIXED,
+    },
     MIN_EDGE_THRESHOLD: {
       name: 'Minimum edge threshold',
       description: 'Minimum edge percentage required to place a bet',

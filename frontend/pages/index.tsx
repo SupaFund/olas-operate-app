@@ -13,7 +13,7 @@ import { RewardsHistory } from '@/components/RewardsHistory/RewardsHistory';
 import { Settings } from '@/components/SettingsPage';
 import { Setup } from '@/components/SetupPage';
 import { SupafundConfiguration } from '@/components/SupafundConfiguration';
-import { SupafundDashboard } from '@/components/SupafundDashboard';
+// import { SupafundDashboard } from '@/components/SupafundDashboard'; // Now embedded in Main page
 import { SupafundMainSettings } from '@/components/SupafundMainSettings';
 import { UpdateAgentPage } from '@/components/UpdateAgentPage';
 import { YourWalletPage } from '@/components/YourWalletPage';
@@ -76,8 +76,7 @@ export default function Home() {
         return <AgentActivityPage />;
       case Pages.UpdateAgentTemplate:
         return <UpdateAgentPage />;
-      case Pages.SupafundDashboard:
-        return <SupafundDashboard />;
+      // Removed: SupafundDashboard is now embedded in Main page
       case Pages.SupafundConfiguration:
         return <SupafundConfiguration />;
       case Pages.SupafundMainSettings:

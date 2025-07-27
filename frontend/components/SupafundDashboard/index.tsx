@@ -36,7 +36,7 @@ export const SupafundDashboard = ({ hideBackButton = false }: SupafundDashboardP
 
   if (!isSupafundAgent) {
     return (
-      <CardFlex>
+      <CardFlex $noBorder $padding="16px">
         <Card>
           <Title level={4}>Supafund Dashboard</Title>
           <Typography.Text type="secondary">
@@ -51,16 +51,16 @@ export const SupafundDashboard = ({ hideBackButton = false }: SupafundDashboardP
   }
 
   return (
-    <CardFlex>
+    <CardFlex $noBorder $padding="16px">
       {!hideBackButton && (
         <Row gutter={16} style={{ marginBottom: '16px' }}>
           <Col span={24}>
             <Button
               icon={<ArrowLeftOutlined />}
-              onClick={() => goto(Pages.Main)}
+              onClick={() => goto(Pages.SwitchAgent)}
               style={{ marginBottom: '16px' }}
             >
-              Back to Main
+              Switch Agent
             </Button>
           </Col>
         </Row>
