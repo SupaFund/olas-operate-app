@@ -55,7 +55,7 @@ const weightDescriptions = {
 
 export const SupafundConfiguration = () => {
   const { goto } = usePageState();
-  const { selectedAgentType } = useServices();
+  const { selectedAgentType, selectedService } = useServices();
   const [form] = Form.useForm();
   const [weights, setWeights] = useState<SupafundWeights>(defaultWeights);
   const [isLoading, setIsLoading] = useState(true);
@@ -103,29 +103,49 @@ export const SupafundConfiguration = () => {
     try {
       setIsSaving(true);
 
-      // Get current config and update it
-      const currentConfig = await SupafundService.getSupafundConfig();
-      const updatedConfig = {
-        ...currentConfig,
-        weights,
-      };
-
-      // Save the entire configuration
-      localStorage.setItem('supafund_config', JSON.stringify(updatedConfig));
+      // Update configuration using the new service-sync method
+      await SupafundService.updateSupafundWeights(
+        weights, 
+        selectedService?.service_config_id
+      );
 
       message.success('Configuration saved successfully!');
+
+      // Restart agent to apply new configuration
+      if (selectedService?.service_config_id) {
+        message.loading('Restarting agent to apply new configuration...', 0);
+        
+        try {
+          await SupafundService.restartSupafundService(selectedService.service_config_id);
+          message.destroy();
+          message.success('Agent restarted successfully! New configuration is now active.');
+        } catch (restartError) {
+          message.destroy();
+          console.error('Restart error:', restartError);
+          
+          // More detailed error message
+          const errorMsg = restartError.message || 'Unknown error';
+          if (errorMsg.includes('500')) {
+            message.error('Server error during restart. Please check agent logs and try restarting manually.');
+          } else if (errorMsg.includes('connection')) {
+            message.warning('Connection issue during restart. Please check if the agent service is running.');
+          } else {
+            message.warning(`Configuration saved but restart failed: ${errorMsg}. You may need to restart manually.`);
+          }
+        }
+      }
 
       // Navigate back to dashboard after saving
       setTimeout(() => {
         goto(Pages.Main);
-      }, 1000);
+      }, 2000);
     } catch (error) {
       message.error('Failed to save configuration');
       console.error('Save error:', error);
     } finally {
       setIsSaving(false);
     }
-  }, [weights, goto]);
+  }, [weights, goto, selectedService?.service_config_id]);
 
   if (!isSupafundAgent) {
     return (

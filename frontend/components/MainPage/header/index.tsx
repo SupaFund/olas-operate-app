@@ -12,7 +12,6 @@ import { FirstRunModal } from '../modals/FirstRunModal';
 import { AgentButton } from './AgentButton/AgentButton';
 import { AgentHead } from './AgentHead';
 import { AgentProfileButton } from './AgentProfileButton';
-import { AgentSettingsButton } from './AgentSettingsButton';
 import { SupafundSettingsButton } from './SupafundDashboardButton';
 import { SwitchAgentButton } from './SwitchAgentButton';
 
@@ -45,18 +44,21 @@ export const MainHeader = () => {
   // TODO: support loading state
 
   return (
-    <CardSection gap={6} padding="8px 24px" justify="space-between">
-      <Flex justify="start" align="center" gap={8}>
-        <AgentHead />
-        <AgentButton />
-        <SwitchAgentButton />
-        <FirstRunModal open={isFirstRunModalOpen} onClose={handleModalClose} />
-      </Flex>
+    <CardSection gap={6} padding="12px 20px">
+      <Flex justify="space-between" align="center" style={{ minHeight: '32px' }}>
+        {/* Left: Agent info and main control */}
+        <Flex justify="start" align="center" gap={12}>
+          <AgentHead />
+          <AgentButton />
+          <FirstRunModal open={isFirstRunModalOpen} onClose={handleModalClose} />
+        </Flex>
 
-      <Flex gap={8} align="center">
-        <SupafundSettingsButton />
-        <AgentSettingsButton />
-        <AgentProfileButton />
+        {/* Right: Compact action buttons */}
+        <Flex gap={6} align="center">
+          <SwitchAgentButton />
+          <SupafundSettingsButton />
+          <AgentProfileButton />
+        </Flex>
       </Flex>
     </CardSection>
   );

@@ -32,6 +32,7 @@ export interface MarketData {
   id: string;
   title: string;
   outcomes: string[];
+  outcomeTokenMarginalPrices?: string[];
   collateralToken: string;
   fee: string;
   creationTimestamp: string;
@@ -122,6 +123,7 @@ export const queryMarketOpportunities = async (): Promise<MarketData[]> => {
         id
         title
         outcomes
+        outcomeTokenMarginalPrices
         collateralToken
         fee
         creationTimestamp

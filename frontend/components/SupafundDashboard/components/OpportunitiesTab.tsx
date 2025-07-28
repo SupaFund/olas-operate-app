@@ -1,12 +1,10 @@
 import { InfoCircleOutlined } from '@ant-design/icons';
 import {
-  Badge,
   Button,
   Card,
   Col,
   Empty,
   Row,
-  Space,
   Tag,
   Typography,
 } from 'antd';
@@ -17,9 +15,7 @@ const { Title, Text } = Typography;
 interface Opportunity {
   id: string;
   title: string;
-  edge: number;
-  confidence: 'HIGH' | 'MEDIUM' | 'LOW';
-  direction: 'YES' | 'NO';
+  marketLeader: string; // e.g., "73% YES" or "51% NO"
   category: string;
   expiresIn: string;
 }
@@ -28,22 +24,6 @@ interface OpportunitiesTabProps {
   opportunities: Opportunity[];
 }
 
-const getConfidenceColor = (confidence: string) => {
-  switch (confidence) {
-    case 'HIGH':
-      return 'success';
-    case 'MEDIUM':
-      return 'warning';
-    case 'LOW':
-      return 'default';
-    default:
-      return 'default';
-  }
-};
-
-const getDirectionColor = (direction: string) => {
-  return direction === 'YES' ? 'green' : 'red';
-};
 
 export const OpportunitiesTab: React.FC<OpportunitiesTabProps> = ({
   opportunities,
@@ -67,7 +47,7 @@ export const OpportunitiesTab: React.FC<OpportunitiesTabProps> = ({
             style={{ width: '100%' }}
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {/* Header with edge badge */}
+              {/* Header with market leader badge */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <Title 
                   level={5} 
@@ -76,21 +56,20 @@ export const OpportunitiesTab: React.FC<OpportunitiesTabProps> = ({
                 >
                   {opportunity.title}
                 </Title>
-                <Tag color={opportunity.edge > 10 ? 'green' : 'blue'} style={{ margin: 0, fontSize: '11px' }}>
-                  {opportunity.edge}% Edge
+                <Tag 
+                  color={
+                    opportunity.marketLeader.includes('%') ? (
+                      opportunity.marketLeader.includes('YES') ? 'green' : 'red'
+                    ) : 'blue'
+                  }
+                  style={{ margin: 0, fontSize: '11px' }}
+                >
+                  {opportunity.marketLeader}
                 </Tag>
               </div>
               
-              {/* Tags and category */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
-                <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-                  <Tag color={getDirectionColor(opportunity.direction)} style={{ margin: 0, fontSize: '11px' }}>
-                    {opportunity.direction}
-                  </Tag>
-                  <Tag color={getConfidenceColor(opportunity.confidence)} style={{ margin: 0, fontSize: '11px' }}>
-                    {opportunity.confidence}
-                  </Tag>
-                </div>
+              {/* Category only */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <Text type="secondary" style={{ fontSize: '11px' }}>
                   {opportunity.category}
                 </Text>

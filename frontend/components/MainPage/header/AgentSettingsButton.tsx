@@ -31,11 +31,17 @@ export const AgentSettingsButton = () => {
       placement="bottomLeft"
     >
       <Button
-        type="default"
-        size="large"
+        type="text"
+        size="small"
         disabled={!isAgentSettingsEnabled}
         onClick={handleClick}
         icon={<ControlOutlined />}
+        style={{
+          color: isAgentSettingsEnabled ? '#666' : '#ccc',
+          height: '28px',
+          display: 'flex',
+          alignItems: 'center'
+        }}
       />
     </Tooltip>
   );

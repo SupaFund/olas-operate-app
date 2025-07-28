@@ -20,11 +20,17 @@ const AgentProfile = ({ onClick }: { onClick?: () => void }) => {
 
   return (
     <Button
-      type="default"
-      size="large"
+      type="text"
+      size="small"
       disabled={selectedAgentConfig.isUnderConstruction}
       icon={<AgentProfileSvg />}
       onClick={onClick}
+      style={{
+        color: selectedAgentConfig.isUnderConstruction ? '#ccc' : '#666',
+        height: '28px',
+        display: 'flex',
+        alignItems: 'center'
+      }}
     />
   );
 };

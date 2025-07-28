@@ -31,10 +31,16 @@ export const SupafundSettingsButton = () => {
       placement="bottomLeft"
     >
       <Button
-        type="default"
-        size="large"
+        type="text"
+        size="small"
         onClick={handleClick}
         icon={<SettingOutlined />}
+        style={{
+          color: '#666',
+          height: '28px',
+          display: 'flex',
+          alignItems: 'center'
+        }}
       />
     </Tooltip>
   );
