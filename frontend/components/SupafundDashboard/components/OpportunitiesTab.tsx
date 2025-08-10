@@ -2,9 +2,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import {
   Button,
   Card,
-  Col,
   Empty,
-  Row,
   Tag,
   Typography,
 } from 'antd';
@@ -38,56 +36,85 @@ export const OpportunitiesTab: React.FC<OpportunitiesTabProps> = ({
   }
 
   return (
-    <Row gutter={[12, 12]}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
       {opportunities.map((opportunity) => (
-        <Col xs={24} key={opportunity.id}>
-          <Card
-            hoverable
-            size="small"
-            style={{ width: '100%' }}
-          >
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {/* Header with market leader badge */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <Title 
-                  level={5} 
-                  style={{ margin: 0, fontSize: '14px', flex: 1, marginRight: '8px' }}
-                  ellipsis={{ rows: 2, tooltip: opportunity.title }}
-                >
-                  {opportunity.title}
-                </Title>
-                <Tag 
-                  color={
-                    opportunity.marketLeader.includes('%') ? (
-                      opportunity.marketLeader.includes('YES') ? 'green' : 'red'
-                    ) : 'blue'
-                  }
-                  style={{ margin: 0, fontSize: '11px' }}
-                >
-                  {opportunity.marketLeader}
-                </Tag>
-              </div>
-              
-              {/* Category only */}
-              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <Text type="secondary" style={{ fontSize: '11px' }}>
+        <Card
+          key={opportunity.id}
+          hoverable
+          style={{ 
+            borderRadius: '8px',
+            border: '1px solid #e8e8e8',
+            transition: 'all 0.2s ease-in-out'
+          }}
+          bodyStyle={{ padding: '16px' }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {/* Header with market leader badge */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
+              <Title 
+                level={5} 
+                style={{ 
+                  margin: 0, 
+                  fontSize: '15px', 
+                  flex: 1, 
+                  lineHeight: '22px',
+                  fontWeight: 500
+                }}
+                ellipsis={{ rows: 2, tooltip: opportunity.title }}
+              >
+                {opportunity.title}
+              </Title>
+              <Tag 
+                color={
+                  opportunity.marketLeader.includes('%') ? (
+                    opportunity.marketLeader.includes('YES') ? 'green' : 'red'
+                  ) : 'blue'
+                }
+                style={{ 
+                  margin: 0, 
+                  fontSize: '11px',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  fontWeight: 500
+                }}
+              >
+                {opportunity.marketLeader}
+              </Tag>
+            </div>
+            
+            {/* Footer with category, expiry and action */}
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center',
+              paddingTop: '8px',
+              borderTop: '1px solid #f5f5f5'
+            }}>
+              <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                <Text type="secondary" style={{ fontSize: '12px' }}>
                   {opportunity.category}
                 </Text>
-              </div>
-              
-              {/* Footer with expiry and action */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text type="secondary" style={{ fontSize: '11px' }}>
+                <Text type="secondary" style={{ fontSize: '12px' }}>
                   Expires in {opportunity.expiresIn}
                 </Text>
-                <Button type="link" icon={<InfoCircleOutlined />} size="small" style={{ padding: '0 4px', fontSize: '11px' }}>
-                  View
-                </Button>
               </div>
+              <Button 
+                type="link" 
+                icon={<InfoCircleOutlined />} 
+                size="small" 
+                style={{ 
+                  padding: '4px 8px', 
+                  fontSize: '12px',
+                  height: 'auto',
+                  color: '#666'
+                }}
+              >
+                View
+              </Button>
             </div>
-          </Card>
-        </Col>
+          </div>
+        </Card>
       ))}
-    </Row>
+    </div>
   );
 };

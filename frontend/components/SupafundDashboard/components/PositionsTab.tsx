@@ -1,4 +1,4 @@
-import { Button, Card, Empty, Space, Tag, Typography } from 'antd';
+import { Button, Card, Empty, Tag, Typography } from 'antd';
 import React from 'react';
 
 const { Text } = Typography;
@@ -28,52 +28,98 @@ export const PositionsTab: React.FC<PositionsTabProps> = ({ positions }) => {
   }
 
   return (
-    <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
       {positions.map((position) => {
         const pnlColor = position.pnl >= 0 ? '#3f8600' : '#cf1322';
         const pnlPrefix = position.pnl >= 0 ? '+' : '';
         
         return (
-          <Card key={position.id} size="small" style={{ width: '100%' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <Card 
+            key={position.id} 
+            style={{ 
+              borderRadius: '8px',
+              border: '1px solid #e8e8e8',
+              transition: 'all 0.2s ease-in-out'
+            }}
+            bodyStyle={{ padding: '16px' }}
+          >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {/* Market title with direction tag */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <Text strong style={{ fontSize: '14px', flex: 1, marginRight: '8px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
+                <Text 
+                  strong 
+                  style={{ 
+                    fontSize: '15px', 
+                    flex: 1, 
+                    lineHeight: '22px',
+                    fontWeight: 500
+                  }}
+                  ellipsis={{ tooltip: position.market }}
+                >
                   {position.market}
                 </Text>
-                <Tag color={position.direction === 'YES' ? 'green' : 'red'} style={{ margin: 0 }}>
+                <Tag 
+                  color={position.direction === 'YES' ? 'green' : 'red'} 
+                  style={{ 
+                    margin: 0,
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    fontSize: '11px',
+                    fontWeight: 500
+                  }}
+                >
                   {position.direction}
                 </Tag>
               </div>
               
               {/* Price info */}
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div>
-                  <Text type="secondary" style={{ fontSize: '12px' }}>Entry: </Text>
-                  <Text style={{ fontSize: '12px' }}>${position.entryPrice.toFixed(2)}</Text>
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: '1fr 1fr 1fr', 
+                gap: '16px',
+                padding: '12px 0',
+                borderTop: '1px solid #f5f5f5',
+                borderBottom: '1px solid #f5f5f5'
+              }}>
+                <div style={{ textAlign: 'center' }}>
+                  <Text type="secondary" style={{ fontSize: '12px', display: 'block', marginBottom: '4px' }}>Entry Price</Text>
+                  <Text style={{ fontSize: '14px', fontWeight: 500 }}>${position.entryPrice.toFixed(2)}</Text>
                 </div>
-                <div>
-                  <Text type="secondary" style={{ fontSize: '12px' }}>Current: </Text>
-                  <Text style={{ fontSize: '12px' }}>${position.currentPrice.toFixed(2)}</Text>
+                <div style={{ textAlign: 'center' }}>
+                  <Text type="secondary" style={{ fontSize: '12px', display: 'block', marginBottom: '4px' }}>Current Price</Text>
+                  <Text style={{ fontSize: '14px', fontWeight: 500 }}>${position.currentPrice.toFixed(2)}</Text>
                 </div>
-                <div>
-                  <Text type="secondary" style={{ fontSize: '12px' }}>Size: </Text>
-                  <Text style={{ fontSize: '12px' }}>${position.size.toFixed(2)}</Text>
+                <div style={{ textAlign: 'center' }}>
+                  <Text type="secondary" style={{ fontSize: '12px', display: 'block', marginBottom: '4px' }}>Position Size</Text>
+                  <Text style={{ fontSize: '14px', fontWeight: 500 }}>${position.size.toFixed(2)}</Text>
                 </div>
               </div>
               
               {/* P&L and time remaining */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                  <Text style={{ color: pnlColor, fontSize: '13px', fontWeight: 'bold' }}>
+                  <Text style={{ 
+                    color: pnlColor, 
+                    fontSize: '15px', 
+                    fontWeight: 'bold' 
+                  }}>
                     {pnlPrefix}${position.pnl.toFixed(2)} ({pnlPrefix}{position.pnlPercentage.toFixed(1)}%)
                   </Text>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Text type="secondary" style={{ fontSize: '11px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <Text type="secondary" style={{ fontSize: '12px' }}>
                     {position.timeRemaining}
                   </Text>
-                  <Button type="link" size="small" style={{ padding: '0 4px', fontSize: '11px' }}>
+                  <Button 
+                    type="link" 
+                    size="small" 
+                    style={{ 
+                      padding: '4px 8px', 
+                      fontSize: '12px',
+                      height: 'auto',
+                      color: '#666'
+                    }}
+                  >
                     View
                   </Button>
                 </div>
@@ -82,6 +128,6 @@ export const PositionsTab: React.FC<PositionsTabProps> = ({ positions }) => {
           </Card>
         );
       })}
-    </Space>
+    </div>
   );
 };

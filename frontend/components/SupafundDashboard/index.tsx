@@ -1,5 +1,5 @@
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Row, Spin, Tabs, Typography } from 'antd';
+import { Button, Card, Spin, Tabs, Typography } from 'antd';
 import { useMemo } from 'react';
 
 import { GoToMainPageButton } from '@/components/Pages/GoToMainPageButton';
@@ -51,31 +51,51 @@ export const SupafundDashboard = ({ hideBackButton = false }: SupafundDashboardP
   }
 
   return (
-    <CardFlex $noBorder $padding="16px">
+    <CardFlex $noBorder>
       {!hideBackButton && (
-        <Row gutter={16} style={{ marginBottom: '16px' }}>
-          <Col span={24}>
-            <Button
-              icon={<ArrowLeftOutlined />}
-              onClick={() => goto(Pages.SwitchAgent)}
-              style={{ marginBottom: '16px' }}
-            >
-              Switch Agent
-            </Button>
-          </Col>
-        </Row>
+        <div style={{ marginBottom: '20px' }}>
+          <Button
+            icon={<ArrowLeftOutlined />}
+            onClick={() => goto(Pages.SwitchAgent)}
+            type="text"
+            style={{ 
+              padding: '4px 8px',
+              color: '#666',
+              fontSize: '14px'
+            }}
+          >
+            Switch Agent
+          </Button>
+        </div>
       )}
 
-      <DashboardHeader
-        agentName={selectedAgentConfig.displayName}
-        onConfigClick={() => goto(Pages.SupafundConfiguration)}
-      />
+      <div style={{ marginBottom: '20px' }}>
+        <DashboardHeader
+          agentName={selectedAgentConfig.displayName}
+          onConfigClick={() => goto(Pages.SupafundConfiguration)}
+        />
+      </div>
 
       <Spin spinning={isLoading}>
-        <MetricsSection metrics={metrics} />
+        <div style={{ marginBottom: '24px' }}>
+          <MetricsSection metrics={metrics} />
+        </div>
 
-        <Card style={{ marginTop: '16px' }}>
-          <Tabs defaultActiveKey="opportunities" size="large">
+        <Card 
+          style={{ 
+            borderRadius: '8px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.06)' 
+          }}
+          bodyStyle={{ padding: '20px' }}
+        >
+          <Tabs 
+            defaultActiveKey="opportunities" 
+            size="large"
+            tabBarStyle={{ 
+              marginBottom: '20px',
+              borderBottom: '1px solid #f0f0f0'
+            }}
+          >
             <TabPane tab="Opportunities" key="opportunities">
               <OpportunitiesTab opportunities={opportunities} />
             </TabPane>

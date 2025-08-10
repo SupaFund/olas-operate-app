@@ -21,7 +21,6 @@ import { useServices } from '@/hooks/useServices';
 import { SupafundService } from '@/service/agents/Supafund';
 
 import { PresetSelector } from './components/PresetSelector';
-import { WeightRadarChart } from './components/WeightRadarChart';
 
 const { Title, Text } = Typography;
 
@@ -191,106 +190,95 @@ export const SupafundConfiguration = () => {
       </Card>
 
       <Spin spinning={isLoading}>
-        <Row gutter={16} style={{ marginTop: '16px' }}>
-          <Col xs={24} lg={16}>
-            <Card>
-              <PresetSelector
-                currentWeights={weights}
-                onSelect={handlePresetSelect}
-                onReset={() => setWeights(defaultWeights)}
-              />
+        <Card style={{ marginTop: '16px' }}>
+          <PresetSelector
+            currentWeights={weights}
+            onSelect={handlePresetSelect}
+            onReset={() => setWeights(defaultWeights)}
+          />
 
-              <Form form={form} layout="vertical" style={{ marginTop: '24px' }}>
-                {Object.entries(weights).map(([key, value]) => (
-                  <Card key={key} size="small" style={{ marginBottom: '16px' }}>
-                    <Row gutter={16} align="middle">
-                      <Col span={8}>
-                        <Title level={5} style={{ margin: 0 }}>
-                          {key
-                            .split('_')
-                            .map(
-                              (word) =>
-                                word.charAt(0).toUpperCase() + word.slice(1),
-                            )
-                            .join(' & ')}
-                        </Title>
-                        <Text type="secondary" style={{ fontSize: '12px' }}>
-                          {
-                            weightDescriptions[
-                              key as keyof typeof weightDescriptions
-                            ]
-                          }
-                        </Text>
-                      </Col>
-                      <Col span={12}>
-                        <Slider
-                          min={0}
-                          max={100}
-                          value={value}
-                          onChange={(val) =>
-                            handleUpdateWeights(
-                              key as keyof SupafundWeights,
-                              val,
-                            )
-                          }
-                          marks={{
-                            0: '0%',
-                            50: '50%',
-                            100: '100%',
-                          }}
-                        />
-                      </Col>
-                      <Col span={4} style={{ textAlign: 'center' }}>
-                        <Title
-                          level={4}
-                          style={{
-                            margin: 0,
-                            color: value > 0 ? '#1890ff' : '#d9d9d9',
-                          }}
-                        >
-                          {value}%
-                        </Title>
-                      </Col>
-                    </Row>
-                  </Card>
-                ))}
-              </Form>
-
-              <Card
-                style={{
-                  backgroundColor: isWeightValid ? '#f6ffed' : '#fff2e8',
-                  borderColor: isWeightValid ? '#b7eb8f' : '#ffd591',
-                }}
-              >
-                <Row justify="space-between" align="middle">
-                  <Text
-                    style={{
-                      color: isWeightValid ? '#52c41a' : '#fa8c16',
-                      fontWeight: 600,
-                      fontSize: '16px',
-                    }}
-                  >
-                    Total Weight: {totalWeight}%
-                  </Text>
-                  <Text
-                    style={{ color: isWeightValid ? '#52c41a' : '#fa8c16' }}
-                  >
-                    {isWeightValid
-                      ? '✓ Perfect!'
-                      : `${totalWeight > 100 ? 'Reduce' : 'Add'} ${Math.abs(100 - totalWeight)}%`}
-                  </Text>
+          <Form form={form} layout="vertical" style={{ marginTop: '24px' }}>
+            {Object.entries(weights).map(([key, value]) => (
+              <Card key={key} size="small" style={{ marginBottom: '16px' }}>
+                <Row gutter={16} align="middle">
+                  <Col span={8}>
+                    <Title level={5} style={{ margin: 0 }}>
+                      {key
+                        .split('_')
+                        .map(
+                          (word) =>
+                            word.charAt(0).toUpperCase() + word.slice(1),
+                        )
+                        .join(' & ')}
+                    </Title>
+                    <Text type="secondary" style={{ fontSize: '12px' }}>
+                      {
+                        weightDescriptions[
+                          key as keyof typeof weightDescriptions
+                        ]
+                      }
+                    </Text>
+                  </Col>
+                  <Col span={12}>
+                    <Slider
+                      min={0}
+                      max={100}
+                      value={value}
+                      onChange={(val) =>
+                        handleUpdateWeights(
+                          key as keyof SupafundWeights,
+                          val,
+                        )
+                      }
+                      marks={{
+                        0: '0%',
+                        50: '50%',
+                        100: '100%',
+                      }}
+                    />
+                  </Col>
+                  <Col span={4} style={{ textAlign: 'center' }}>
+                    <Title
+                      level={4}
+                      style={{
+                        margin: 0,
+                        color: value > 0 ? '#1890ff' : '#d9d9d9',
+                      }}
+                    >
+                      {value}%
+                    </Title>
+                  </Col>
                 </Row>
               </Card>
-            </Card>
-          </Col>
+            ))}
+          </Form>
 
-          <Col xs={24} lg={8}>
-            <Card>
-              <Title level={4}>Weight Distribution</Title>
-              <WeightRadarChart weights={weights} />
-            </Card>
-          </Col>
-        </Row>
+          <Card
+            style={{
+              backgroundColor: isWeightValid ? '#f6ffed' : '#fff2e8',
+              borderColor: isWeightValid ? '#b7eb8f' : '#ffd591',
+            }}
+          >
+            <Row justify="space-between" align="middle">
+              <Text
+                style={{
+                  color: isWeightValid ? '#52c41a' : '#fa8c16',
+                  fontWeight: 600,
+                  fontSize: '16px',
+                }}
+              >
+                Total Weight: {totalWeight}%
+              </Text>
+              <Text
+                style={{ color: isWeightValid ? '#52c41a' : '#fa8c16' }}
+              >
+                {isWeightValid
+                  ? '✓ Perfect!'
+                  : `${totalWeight > 100 ? 'Reduce' : 'Add'} ${Math.abs(100 - totalWeight)}%`}
+              </Text>
+            </Row>
+          </Card>
+        </Card>
 
         <Row style={{ marginTop: '16px' }}>
           <Col span={24}>

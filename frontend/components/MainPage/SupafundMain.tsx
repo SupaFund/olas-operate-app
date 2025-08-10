@@ -1,7 +1,7 @@
-import { Card, Flex } from 'antd';
 import { useMemo } from 'react';
 
 import { SupafundDashboard } from '@/components/SupafundDashboard';
+import { CardFlex } from '@/components/styled/CardFlex';
 import { AgentType } from '@/enums/Agent';
 import { useServices } from '@/hooks/useServices';
 
@@ -25,22 +25,15 @@ export const SupafundMain = () => {
   }
 
   return (
-    <Card
-      styles={{ body: { paddingTop: 0, paddingBottom: 0 } }}
-      style={{ borderTopColor: 'transparent' }}
-    >
-      <Flex vertical>
-        {/* Keep the header with start agent functionality */}
-        <MainHeader />
-        
-        {/* Keep agent running section for easy start/stop */}
-        <KeepAgentRunningSection />
-        
-        {/* Show Supafund Dashboard as main content */}
-        <div style={{ marginTop: '16px' }}>
-          <SupafundDashboard hideBackButton />
-        </div>
-      </Flex>
-    </Card>
+    <CardFlex $padding="12px">
+      {/* Keep the header with start agent functionality */}
+      <MainHeader />
+      
+      {/* Keep agent running section for easy start/stop */}
+      <KeepAgentRunningSection />
+      
+      {/* Show Supafund Dashboard as main content */}
+      <SupafundDashboard hideBackButton />
+    </CardFlex>
   );
 };
