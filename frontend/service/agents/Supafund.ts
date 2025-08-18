@@ -97,6 +97,17 @@ export class SupafundService {
           value: JSON.stringify(config.weights),
           provision_type: 'USER' as any,
         };
+        
+        // Update PROMPT_TEMPLATE to include weights in AI analysis
+        const weightsStr = JSON.stringify(config.weights);
+        const promptWithWeights = `With the given question "@{question}" and the \`yes\` option represented by \`@{yes}\` and the \`no\` option represented by \`@{no}\`, what are the respective probabilities of \`p_yes\` and \`p_no\` occurring? Please consider following weights when analysis: ${weightsStr}`;
+        
+        envVariables.PROMPT_TEMPLATE = {
+          name: 'Prompt template with Supafund weights',
+          description: 'AI prompt template that includes Supafund analysis weights for decision making',
+          value: promptWithWeights,
+          provision_type: 'USER' as any,
+        };
       }
 
       // Update min edge threshold if provided
