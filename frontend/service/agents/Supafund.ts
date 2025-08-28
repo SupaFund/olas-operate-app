@@ -1,11 +1,117 @@
+import { ethers } from 'ethers';
+import { formatEther } from 'ethers/lib/utils';
+
+import { STAKING_PROGRAMS } from '@/config/stakingPrograms';
+import { PROVIDERS } from '@/constants/providers';
+import { EvmChainId } from '@/enums/Chain';
+import { StakingProgramId } from '@/enums/StakingProgram';
+import { Address } from '@/types/Address';
+import {
+  ServiceStakingDetails,
+  StakingContractDetails,
+  StakingRewardsInfo,
+} from '@/types/Autonolas';
+
+import {
+  ONE_YEAR,
+  StakedAgentService,
+} from './shared-services/StakedAgentService';
+
+const MECH_REQUESTS_SAFETY_MARGIN = 1;
+
 /**
  * Supafund Service
- * Note: Since PredictTraderService is abstract, we'll add Supafund-specific
- * static methods here that can be used alongside PredictTraderService
+ * Extends StakedAgentService to provide proper integration with staking programs
  */
-export class SupafundService {
-  // Supafund inherits all methods from PredictTraderService
-  // Additional Supafund-specific methods can be added here
+export abstract class SupafundService extends StakedAgentService {
+  static getAgentStakingRewardsInfo = async ({
+    agentMultisigAddress,
+    serviceId,
+    stakingProgramId,
+    chainId = EvmChainId.Gnosis,
+  }: {
+    agentMultisigAddress: Address;
+    serviceId: number;
+    stakingProgramId: StakingProgramId;
+    chainId?: EvmChainId;
+  }): Promise<StakingRewardsInfo | undefined> => {
+    if (!agentMultisigAddress) return;
+    if (!serviceId) return;
+
+    const stakingProgramConfig = STAKING_PROGRAMS[chainId][stakingProgramId];
+
+    if (!stakingProgramConfig) throw new Error('Staking program not found');
+
+    const {
+      activityChecker,
+      contract: stakingTokenProxyContract,
+      mech: mechContract,
+    } = stakingProgramConfig;
+
+    if (!mechContract) throw new Error('Mech contract is not defined');
+
+    const provider = PROVIDERS[chainId].multicallProvider;
+
+    const contractCalls = [
+      mechContract.getRequestsCount(agentMultisigAddress),
+      stakingTokenProxyContract.getServiceInfo(serviceId),
+      stakingTokenProxyContract.livenessPeriod(),
+      activityChecker.livenessRatio(),
+      stakingTokenProxyContract.rewardsPerSecond(),
+      stakingTokenProxyContract.calculateStakingReward(serviceId),
+      stakingTokenProxyContract.minStakingDeposit(),
+      stakingTokenProxyContract.tsCheckpoint(),
+    ];
+    const multicallResponse = await provider.all(contractCalls);
+
+    const [
+      mechRequestCount,
+      serviceInfo,
+      livenessPeriod,
+      livenessRatio,
+      rewardsPerSecond,
+      accruedStakingReward,
+      minStakingDeposit,
+      tsCheckpoint,
+    ] = multicallResponse;
+
+    const nowInSeconds = Math.floor(Date.now() / 1000);
+
+    const requiredMechRequests =
+      (Math.ceil(Math.max(livenessPeriod, nowInSeconds - tsCheckpoint)) *
+        livenessRatio) /
+        1e18 +
+      MECH_REQUESTS_SAFETY_MARGIN;
+
+    const mechRequestCountOnLastCheckpoint = serviceInfo[2][1];
+    const eligibleRequests =
+      mechRequestCount - mechRequestCountOnLastCheckpoint;
+
+    const isEligible = eligibleRequests >= requiredMechRequests;
+
+    const totalRewardsAvailableETH = Number(
+      formatEther(rewardsPerSecond * ONE_YEAR),
+    );
+    const minimumStakedAmountETH = Number(formatEther(minStakingDeposit));
+    const accruedServiceStakingRewardETH = Number(
+      formatEther(accruedStakingReward),
+    );
+
+    const estimatedAnnualReward = isEligible
+      ? totalRewardsAvailableETH
+      : totalRewardsAvailableETH * 0.5;
+
+    return {
+      serviceId,
+      stakingProgramId,
+      stakingProgram: stakingProgramConfig.name,
+      availableRewardsForEpochETH: totalRewardsAvailableETH,
+      minimumStakedAmountETH,
+      accruedServiceStakingRewardETH,
+      isEligibleForRewards: isEligible,
+      estimatedAnnualReward,
+    };
+  };
 
   /**
    * Validate weights configuration
@@ -192,4 +298,104 @@ export class SupafundService {
       throw new Error(`Failed to restart service: ${error.message}`);
     }
   };
+
+  static getAvailableRewardsForEpoch = async (
+    stakingProgramId: StakingProgramId,
+    chainId: EvmChainId = EvmChainId.Gnosis,
+  ): Promise<bigint | undefined> => {
+    const stakingProgramConfig = STAKING_PROGRAMS[chainId][stakingProgramId];
+    if (!stakingProgramConfig) return undefined;
+
+    const { contract: stakingTokenProxyContract } = stakingProgramConfig;
+    const provider = PROVIDERS[chainId].multicallProvider;
+
+    const rewardsPerSecond = await provider.all([
+      stakingTokenProxyContract.rewardsPerSecond(),
+    ]);
+
+    return rewardsPerSecond[0] * BigInt(ONE_YEAR);
+  };
+
+  static getServiceStakingDetails = async (
+    serviceNftTokenId: number,
+    stakingProgramId: StakingProgramId,
+    chainId: EvmChainId = EvmChainId.Gnosis,
+  ): Promise<ServiceStakingDetails> => {
+    const stakingProgramConfig = STAKING_PROGRAMS[chainId][stakingProgramId];
+    if (!stakingProgramConfig) throw new Error('Staking program not found');
+
+    const { contract: stakingTokenProxyContract } = stakingProgramConfig;
+    const provider = PROVIDERS[chainId].multicallProvider;
+
+    const [serviceInfo, minStakingDeposit] = await provider.all([
+      stakingTokenProxyContract.getServiceInfo(serviceNftTokenId),
+      stakingTokenProxyContract.minStakingDeposit(),
+    ]);
+
+    return {
+      serviceId: serviceNftTokenId,
+      stakingProgramId,
+      multisig: serviceInfo[0],
+      owner: serviceInfo[1],
+      nonces: serviceInfo[2],
+      tsStart: serviceInfo[3],
+      reward: serviceInfo[4],
+      inactivity: serviceInfo[5],
+      minStakingDeposit: Number(formatEther(minStakingDeposit)),
+    };
+  };
+
+  static getStakingContractDetails = async (
+    stakingProgramId: StakingProgramId,
+    chainId: EvmChainId,
+  ): Promise<StakingContractDetails> => {
+    const stakingProgramConfig = STAKING_PROGRAMS[chainId][stakingProgramId];
+    if (!stakingProgramConfig) throw new Error('Staking program not found');
+
+    const { contract: stakingTokenProxyContract, activityChecker } = stakingProgramConfig;
+    const provider = PROVIDERS[chainId].multicallProvider;
+
+    const [
+      minStakingDeposit,
+      rewardsPerSecond,
+      maxNumServices,
+      livenessPeriod,
+      livenessRatio,
+      serviceIds,
+    ] = await provider.all([
+      stakingTokenProxyContract.minStakingDeposit(),
+      stakingTokenProxyContract.rewardsPerSecond(),
+      stakingTokenProxyContract.maxNumServices(),
+      stakingTokenProxyContract.livenessPeriod(),
+      activityChecker.livenessRatio(),
+      stakingTokenProxyContract.getServiceIds(),
+    ]);
+
+    // Calculate rewards per work period (assuming work period is livenessPeriod)
+    const yearlyRewards = ethers.BigNumber.from(rewardsPerSecond).mul(ONE_YEAR);
+    const availableRewards = Number(formatEther(yearlyRewards));
+    const rewardsPerWorkPeriod = availableRewards / (ONE_YEAR / livenessPeriod);
+    
+    // Calculate APY (simplified calculation based on minimum stake)
+    const minimumStake = Number(formatEther(minStakingDeposit));
+    const apy = minimumStake > 0 ? ((availableRewards / minimumStake) * 100) : 0;
+
+    return {
+      availableRewards,
+      maxNumServices,
+      serviceIds: serviceIds || [],
+      minimumStakingDuration: livenessPeriod,
+      minStakingDeposit: minimumStake,
+      apy: Math.round(apy * 100) / 100, // Round to 2 decimal places
+      olasStakeRequired: minimumStake,
+      rewardsPerWorkPeriod: Math.round(rewardsPerWorkPeriod * 100) / 100,
+    };
+  };
+
+  async getStakingContractDetails(
+    stakingProgramId: StakingProgramId,
+    chainId: EvmChainId,
+  ): Promise<unknown> {
+    return SupafundService.getStakingContractDetails(stakingProgramId, chainId);
+  }
 }

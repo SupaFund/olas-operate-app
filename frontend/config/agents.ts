@@ -12,6 +12,7 @@ import { AgentsFunBaseService } from '@/service/agents/AgentsFunBase';
 import { ModiusService } from '@/service/agents/Modius';
 import { OptimismService } from '@/service/agents/Optimism';
 import { PredictTraderService } from '@/service/agents/PredictTrader';
+import { SupafundService } from '@/service/agents/Supafund';
 import { Address } from '@/types/Address';
 import { AgentConfig } from '@/types/Agent';
 
@@ -124,7 +125,7 @@ export const AGENT_CONFIG: {
     middlewareHomeChainId: MiddlewareChain.GNOSIS,
     requiresAgentSafesOn: [EvmChainId.Gnosis],
     requiresMasterSafesOn: [EvmChainId.Gnosis],
-    serviceApi: PredictTraderService,
+    serviceApi: SupafundService,
     displayName: 'Supafund agent',
     description:
       'Predicts whether emerging projects will achieve key milestones, providing detailed AI-powered analysis of exciting new projects.',

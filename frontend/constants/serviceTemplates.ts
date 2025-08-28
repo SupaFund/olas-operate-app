@@ -572,7 +572,7 @@ export const SUPAFUND_SERVICE_TEMPLATE: ServiceTemplate = {
   home_chain: MiddlewareChain.GNOSIS,
   configurations: {
     [MiddlewareChain.GNOSIS]: {
-      staking_program_id: STAKING_PROGRAM_IDS.PearlBeta,
+      staking_program_id: STAKING_PROGRAM_IDS.SupafundBeta,
       nft: 'bafybeig64atqaladigoc3ds4arltdu63wkdrk3gesjfvnfdmz35amv7faq', // TODO: Replace with Supafund NFT
       rpc: DEFAULT_RPC,
       agent_id: 14, // TODO: Replace with Supafund agent ID
@@ -580,7 +580,7 @@ export const SUPAFUND_SERVICE_TEMPLATE: ServiceTemplate = {
       use_staking: true,
       use_mech_marketplace: false,
       cost_of_bond: +parseEther(0.001),
-      monthly_gas_estimate: +parseEther(10),
+      monthly_gas_estimate: +parseEther(1),
       fund_requirements: {
         [ethers.constants.AddressZero]: {
           agent: +parseEther(2),

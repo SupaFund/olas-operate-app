@@ -30,6 +30,8 @@ export const GNOSIS_STAKING_PROGRAMS_CONTRACT_ADDRESSES: Record<
     '0x6C6D01e8eA8f806eF0c22F0ef7ed81D868C1aB39',
   [STAKING_PROGRAM_IDS.PearlBetaMechMarketplace]:
     '0xDaF34eC46298b53a3d24CBCb431E84eBd23927dA',
+  [STAKING_PROGRAM_IDS.SupafundBeta]:
+    '0xe962DD85866F41F008bA5edf0F92583460E4F935',
 } as const;
 
 export const GNOSIS_STAKING_PROGRAMS: StakingProgramMap = {
@@ -175,6 +177,22 @@ export const GNOSIS_STAKING_PROGRAMS: StakingProgramMap = {
       GNOSIS_STAKING_PROGRAMS_CONTRACT_ADDRESSES[
         STAKING_PROGRAM_IDS.PearlBetaMechMarketplace
       ],
+      STAKING_TOKEN_PROXY_ABI,
+    ),
+  },
+  [STAKING_PROGRAM_IDS.SupafundBeta]: {
+    chainId: EvmChainId.Gnosis,
+    name: 'Supafund Beta',
+    agentsSupported: [AgentType.Supafund],
+    stakingRequirements: {
+      [TokenSymbol.OLAS]: 10,
+    },
+    mechType: MechType.Agent,
+    mech: MECHS[EvmChainId.Gnosis][MechType.Agent].contract,
+    activityChecker:
+      GNOSIS_STAKING_PROGRAMS_ACTIVITY_CHECKERS[STAKING_PROGRAM_IDS.SupafundBeta],
+    contract: new MulticallContract(
+      GNOSIS_STAKING_PROGRAMS_CONTRACT_ADDRESSES[STAKING_PROGRAM_IDS.SupafundBeta],
       STAKING_TOKEN_PROXY_ABI,
     ),
   },
