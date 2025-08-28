@@ -166,7 +166,9 @@ const EachAgent = memo(
         <Flex vertical>
           <Flex align="center" justify="space-between" className="mb-8">
             <Image
-              src={`/agent-${agentType}-icon.png`}
+              src={agentType === AgentType.Supafund 
+                ? `/agent-${agentType}-icon.svg` 
+                : `/agent-${agentType}-icon.png`}
               width={36}
               height={36}
               alt={agentConfig.displayName}

@@ -8,6 +8,7 @@ import { TokenSymbol, TokenSymbolConfigMap } from '@/constants/token';
 import { Pages } from '@/enums/Pages';
 import { useBalanceAndRefillRequirementsContext } from '@/hooks/useBalanceAndRefillRequirementsContext';
 import { usePageState } from '@/hooks/usePageState';
+import { useServices } from '@/hooks/useServices';
 import { Address } from '@/types/Address';
 import { BridgeRefillRequirementsRequest, BridgeRequest } from '@/types/Bridge';
 
@@ -136,6 +137,9 @@ export const AddFundsThroughBridge = ({
 }: AddFundsThroughBridgeProps) => {
   const { isBalancesAndFundingRequirementsLoading, totalRequirements } =
     useBalanceAndRefillRequirementsContext();
+  
+  const { selectedService } = useServices();
+  const { goto } = usePageState();
 
   const [bridgeState, setBridgeState] = useState<
     BridgeRefillRequirementsRequest | undefined
@@ -188,7 +192,16 @@ export const AddFundsThroughBridge = ({
             Pearl Safe.
           </Text>
 
-          {isBalancesAndFundingRequirementsLoading ? (
+          {!selectedService?.service_config_id ? (
+            <Flex vertical align="center" gap={16}>
+              <Text type="secondary">
+                No agent configured. Please set up an agent first to use the bridge feature.
+              </Text>
+              <Button type="primary" onClick={() => goto(Pages.Setup)}>
+                Set up Agent
+              </Button>
+            </Flex>
+          ) : isBalancesAndFundingRequirementsLoading || !totalRequirements ? (
             <Loader />
           ) : (
             <AddFundsInput

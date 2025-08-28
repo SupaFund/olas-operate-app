@@ -30,7 +30,7 @@ export const GNOSIS_CHAIN_CONFIG: ChainConfig = {
   name: 'Gnosis',
   nativeToken: TOKEN_CONFIG[EvmChainId.Gnosis][TokenSymbol.XDAI],
   middlewareChain: MiddlewareChainId.GNOSIS,
-  rpc: process.env.GNOSIS_RPC as HttpUrl,
+  rpc: (process.env.GNOSIS_RPC || 'https://rpc.gnosischain.com') as HttpUrl,
   safeCreationThreshold: 1.5,
 } as const;
 
@@ -39,7 +39,7 @@ export const BASE_CHAIN_CONFIG: ChainConfig = {
   name: 'Base',
   nativeToken: TOKEN_CONFIG[EvmChainId.Base][TokenSymbol.ETH],
   middlewareChain: MiddlewareChainId.BASE,
-  rpc: process.env.BASE_RPC as HttpUrl,
+  rpc: (process.env.BASE_RPC || 'https://mainnet.base.org') as HttpUrl,
   safeCreationThreshold: 0.005,
 } as const;
 
@@ -48,7 +48,7 @@ export const MODE_CHAIN_CONFIG: ChainConfig = {
   name: 'Mode',
   nativeToken: TOKEN_CONFIG[EvmChainId.Mode][TokenSymbol.ETH],
   middlewareChain: MiddlewareChainId.MODE,
-  rpc: process.env.MODE_RPC as HttpUrl,
+  rpc: (process.env.MODE_RPC || 'https://mainnet.mode.network') as HttpUrl,
   safeCreationThreshold: 0.0005,
 } as const;
 
@@ -58,7 +58,7 @@ export const CELO_CHAIN_CONFIG: ChainConfig = {
   name: 'Celo',
   nativeToken: TOKEN_CONFIG[EvmChainId.Celo][TokenSymbol.CELO],
   middlewareChain: MiddlewareChainId.CELO,
-  rpc: process.env.CELO_RPC as HttpUrl,
+  rpc: (process.env.CELO_RPC || 'https://forno.celo.org') as HttpUrl,
   safeCreationThreshold: 0.005,
 } as const;
 
@@ -67,7 +67,7 @@ export const OPTIMISM_CHAIN_CONFIG: ChainConfig = {
   name: 'Optimism',
   nativeToken: TOKEN_CONFIG[EvmChainId.Optimism][TokenSymbol.ETH],
   middlewareChain: MiddlewareChainId.OPTIMISM,
-  rpc: process.env.OPTIMISM_RPC as HttpUrl,
+  rpc: (process.env.OPTIMISM_RPC || 'https://mainnet.optimism.io') as HttpUrl,
   safeCreationThreshold: 0.005,
 } as const;
 

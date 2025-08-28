@@ -13,6 +13,7 @@ import { SetupCreateHeader } from '../Create/SetupCreateHeader';
 import { AgentsFunAgentSetup } from './AgentsFunAgentSetup';
 import { ModiusAgentForm } from './ModiusAgentForm/ModiusAgentForm';
 import { OptimusAgentForm } from './OptimusAgentForm/OptimusAgentForm';
+import { SupafundAgentForm } from './SupafundAgentForm/SupafundAgentForm';
 
 const { Title, Text } = Typography;
 
@@ -49,6 +50,9 @@ export const SetupYourAgent = () => {
         )}
         {selectedAgentType === AgentType.Optimus && (
           <OptimusAgentForm serviceTemplate={serviceTemplate} />
+        )}
+        {selectedAgentType === AgentType.Supafund && (
+          <SupafundAgentForm serviceTemplate={serviceTemplate} />
         )}
       </CardFlex>
     </ConfigProvider>

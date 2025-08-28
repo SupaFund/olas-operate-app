@@ -12,7 +12,8 @@ import { useServices } from '@/hooks/useServices';
 import { FirstRunModal } from '../modals/FirstRunModal';
 import { AgentButton } from './AgentButton/AgentButton';
 import { AgentHead } from './AgentHead';
-import { AgentSettingsButton } from './AgentSettingsButton';
+import { SupafundSettingsButton } from './SupafundDashboardButton';
+import { SwitchAgentButton } from './SwitchAgentButton';
 
 const useSetupTrayIcon = () => {
   const { isLowBalance } = useBalanceContext();
@@ -42,16 +43,21 @@ export const MainHeader = () => {
   useSetupTrayIcon();
 
   return (
-    <CardSection gap={6} padding="8px 24px" justify="space-between">
-      <Flex justify="start" align="center" gap={8}>
-        <AgentHead />
-        <AgentButton />
-        <FirstRunModal open={isFirstRunModalOpen} onClose={handleModalClose} />
-      </Flex>
+    <CardSection gap={6} padding="12px 20px">
+      <Flex justify="space-between" align="center" style={{ minHeight: '32px' }}>
+        {/* Left: Agent info and main control */}
+        <Flex justify="start" align="center" gap={12}>
+          <AgentHead />
+          <AgentButton />
+          <FirstRunModal open={isFirstRunModalOpen} onClose={handleModalClose} />
+        </Flex>
 
-      <Flex gap={8} align="center">
-        <AgentSettingsButton />
-        <AgentProfile />
+        {/* Right: Compact action buttons */}
+        <Flex gap={6} align="center">
+          <SwitchAgentButton />
+          <SupafundSettingsButton />
+          <AgentProfile />
+        </Flex>
       </Flex>
     </CardSection>
   );

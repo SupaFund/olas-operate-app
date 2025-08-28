@@ -14,12 +14,31 @@ const nextConfig = {
   },
   transpilePackages: [
     'rc-util',
+    'rc-tree',
+    'rc-table',
+    'rc-cascader',
+    'rc-checkbox',
+    'rc-collapse',
+    'rc-drawer',
+    'rc-dropdown',
+    'rc-field-form',
+    'rc-image',
+    'rc-input-number',
+    'rc-mentions',
+    'rc-notification',
+    'rc-pagination',
+    'rc-picker',
+    'rc-rate',
+    'rc-segmented',
+    'rc-slider',
+    'rc-tabs',
+    'rc-tooltip',
+    'rc-tree-select',
+    'rc-upload',
     '@babel/runtime',
     '@ant-design',
     'rc-pagination',
     'rc-picker',
-    'rc-tree',
-    'rc-table',
   ],
   webpack: (config) => {
     if (config.snapshot) {
@@ -30,6 +49,11 @@ const nextConfig = {
         managedPaths: [/^(.+?[\\/]node_modules[\\/])(?!@next)/],
       };
     }
+
+    // Add module resolution for ESM imports without .js extension
+    config.resolve.extensionAlias = {
+      '.js': ['.js', '.ts', '.tsx'],
+    };
 
     return config;
   },

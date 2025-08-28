@@ -74,3 +74,21 @@ export const OPTIMUS_ONBOARDING_STEPS: OnboardingStep[] = [
   //   imgSrc: 'setup-agent-optimus-3',
   // },
 ] as const;
+
+export const SUPAFUND_ONBOARDING_STEPS: OnboardingStep[] = [
+  {
+    title: 'Personalized Trading Strategy',
+    desc: 'The Supafund Agent uses your personal weights to trade on prediction markets about emerging projects and startups achieving key milestones.',
+    imgSrc: 'setup-agent-prediction-1', // TODO: Replace with Supafund-specific image
+  },
+  {
+    title: 'Discover Promising Projects',
+    desc: "Access the agent's trading reasoning to discover and evaluate new projects. Each trade includes detailed AI-powered analysis of why the agent believes a project will succeed or fail.",
+    imgSrc: 'setup-agent-prediction-2', // TODO: Replace with Supafund-specific image
+  },
+  {
+    title: 'Earn Rewards',
+    desc: "Earn rewards in xDAI for your agent's accurate predictions about project milestones, funding rounds, and mainnet launches.",
+    imgSrc: 'setup-agent-prediction-3', // TODO: Replace with Supafund-specific image
+  },
+] as const;

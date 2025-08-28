@@ -1,43 +1,42 @@
-import { ControlOutlined } from '@ant-design/icons';
+import { SettingOutlined } from '@ant-design/icons';
 import { Button, Tooltip, Typography } from 'antd';
 
+import { AgentType } from '@/enums/Agent';
 import { Pages } from '@/enums/Pages';
-import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { usePageState } from '@/hooks/usePageState';
+import { useServices } from '@/hooks/useServices';
 
 const { Text } = Typography;
 
-export const AgentSettingsButton = () => {
+export const SupafundSettingsButton = () => {
   const { goto } = usePageState();
+  const { selectedAgentType } = useServices();
 
-  const isAgentSettingsEnabled = useFeatureFlag('agent-settings');
+  const isSupafundAgent = selectedAgentType === AgentType.Supafund;
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    goto(Pages.UpdateAgentTemplate);
+    goto(Pages.SupafundMainSettings);
   };
+
+  if (!isSupafundAgent) {
+    return null;
+  }
 
   return (
     <Tooltip
       arrow={false}
-      title={
-        isAgentSettingsEnabled ? null : (
-          <Text className="text-sm">
-            The agent cannot be configured at the moment
-          </Text>
-        )
-      }
+      title={<Text className="text-sm">Supafund Agent Settings</Text>}
       overlayInnerStyle={{ width: 'max-content' }}
       placement="bottomLeft"
     >
       <Button
         type="text"
         size="small"
-        disabled={!isAgentSettingsEnabled}
         onClick={handleClick}
-        icon={<ControlOutlined />}
+        icon={<SettingOutlined />}
         style={{
-          color: isAgentSettingsEnabled ? '#666' : '#ccc',
+          color: '#666',
           height: '28px',
           display: 'flex',
           alignItems: 'center'

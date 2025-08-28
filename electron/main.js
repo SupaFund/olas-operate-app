@@ -217,6 +217,23 @@ async function beforeQuit(event) {
   mainWindow?.destroy();
 
   logger.electron('Stop backend gracefully:');
+  try {
+    logger.electron(
+      `Killing backend server by shutdown endpoint: http://localhost:${appConfig.ports.prod.operate}/shutdown`,
+    );
+    let result = await fetch(
+      `http://localhost:${appConfig.ports.prod.operate}/shutdown`,
+    );
+    logger.electron('Killed backend server by shutdown endpoint!');
+    logger.electron(
+      `Killed backend server by shutdown endpoint! result: ${JSON.stringify(result)}`,
+    );
+  } catch (err) {
+    logger.electron('Backend stopped with error!');
+    logger.electron(
+      'Backend stopped with error, result: ' + JSON.stringify(err),
+    );
+  }
   await stopBackend();
 
   if (operateDaemon || operateDaemonPid) {
@@ -594,8 +611,6 @@ async function launchDaemon() {
         'daemon',
         `--port=${appConfig.ports.prod.operate}`,
         `--home=${paths.dotOperateDirectory}`,
-        `--ssl-keyfile=${keyPath}`,
-        `--ssl-certfile=${certPath}`,
       ],
       { env: Env },
     );
@@ -636,8 +651,6 @@ async function launchDaemonDev() {
       'daemon',
       `--port=${appConfig.ports.dev.operate}`,
       '--home=.operate',
-      `--ssl-keyfile=${keyPath}`,
-      `--ssl-certfile=${certPath}`,
     ]);
     operateDaemonPid = operateDaemon.pid;
     operateDaemon.stderr.on('data', (data) => {

@@ -43,6 +43,12 @@ const AgentProfileButton = ({
       disabled={disabled}
       icon={<AgentProfileSvg />}
       onClick={onClick}
+      style={{
+        color: selectedAgentConfig.isUnderConstruction ? '#ccc' : '#666',
+        height: '28px',
+        display: 'flex',
+        alignItems: 'center'
+      }}
     />
   );
 };

@@ -12,6 +12,9 @@ import { HelpAndSupport } from '@/components/Pages/HelpAndSupportPage';
 import { RewardsHistory } from '@/components/RewardsHistory/RewardsHistory';
 import { Settings } from '@/components/SettingsPage';
 import { Setup } from '@/components/SetupPage';
+import { SupafundConfiguration } from '@/components/SupafundConfiguration';
+// import { SupafundDashboard } from '@/components/SupafundDashboard'; // Now embedded in Main page
+import { SupafundMainSettings } from '@/components/SupafundMainSettings';
 import { UpdateAgentPage } from '@/components/UpdateAgentPage';
 import { YourWalletPage } from '@/components/YourWalletPage';
 import { Pages } from '@/enums/Pages';
@@ -25,6 +28,9 @@ export default function Home() {
   const electronApi = useElectronApi();
 
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+
     // Notify the main process that the app is loaded
     electronApi?.setIsAppLoaded?.(true);
 
@@ -70,6 +76,11 @@ export default function Home() {
         return <AgentActivityPage />;
       case Pages.UpdateAgentTemplate:
         return <UpdateAgentPage />;
+      // Removed: SupafundDashboard is now embedded in Main page
+      case Pages.SupafundConfiguration:
+        return <SupafundConfiguration />;
+      case Pages.SupafundMainSettings:
+        return <SupafundMainSettings />;
 
       // bridge pages
       case Pages.AddFundsToMasterSafeThroughBridge:
