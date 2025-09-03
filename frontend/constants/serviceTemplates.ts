@@ -619,7 +619,7 @@ export const SUPAFUND_SERVICE_TEMPLATE: ServiceTemplate = {
       staking_program_id: STAKING_PROGRAM_IDS.SupafundBeta,
       nft: 'bafybeig64atqaladigoc3ds4arltdu63wkdrk3gesjfvnfdmz35amv7faq', // TODO: Replace with Supafund NFT
       rpc: DEFAULT_RPC,
-      agent_id: 14, // TODO: Replace with Supafund agent ID
+      agent_id: 71, // Supafund Agent Blueprint minted on Ethereum
       threshold: 1,
       use_staking: true,
       use_mech_marketplace: false,

@@ -90,26 +90,27 @@ export abstract class SupafundService extends StakedAgentService {
     const isEligible = eligibleRequests >= requiredMechRequests;
 
     const totalRewardsAvailableETH = Number(
-      formatEther(rewardsPerSecond * ONE_YEAR),
+      formatEther(ethers.BigNumber.from(rewardsPerSecond).mul(ONE_YEAR)),
     );
     const minimumStakedAmountETH = Number(formatEther(minStakingDeposit));
     const accruedServiceStakingRewardETH = Number(
       formatEther(accruedStakingReward),
     );
 
-    const estimatedAnnualReward = isEligible
-      ? totalRewardsAvailableETH
-      : totalRewardsAvailableETH * 0.5;
+    const availableRewardsForEpoch = Math.max(
+      rewardsPerSecond * livenessPeriod, // expected rewards for the epoch
+      rewardsPerSecond * (nowInSeconds - tsCheckpoint), // incase of late checkpoint
+    );
 
     return {
-      serviceId,
-      stakingProgramId,
-      stakingProgram: stakingProgramConfig.name,
-      availableRewardsForEpochETH: totalRewardsAvailableETH,
-      minimumStakedAmountETH,
-      accruedServiceStakingRewardETH,
+      serviceInfo,
+      livenessPeriod,
+      livenessRatio,
+      rewardsPerSecond,
       isEligibleForRewards: isEligible,
-      estimatedAnnualReward,
+      availableRewardsForEpoch,
+      accruedServiceStakingRewards: accruedServiceStakingRewardETH,
+      minimumStakedAmount: minimumStakedAmountETH,
     };
   };
 
