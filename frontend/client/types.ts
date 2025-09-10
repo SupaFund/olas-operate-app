@@ -1,9 +1,9 @@
+import { EnvProvision } from '@/constants/envVariables';
 import { AgentType } from '@/enums/Agent';
 import { StakingProgramId } from '@/enums/StakingProgram';
 import { Address } from '@/types/Address';
 
 import {
-  EnvProvisionType,
   MiddlewareChain,
   MiddlewareDeploymentStatus,
   SupportedMiddlewareChain,
@@ -11,6 +11,15 @@ import {
 
 export type ServiceHash = string;
 export type ServiceConfigId = string;
+
+type AgentRelease = {
+  is_aea: boolean;
+  repository: {
+    owner: string,
+    name: string,
+    version: string,
+  }
+}
 
 type ServiceKeys = {
   address: Address;
@@ -50,7 +59,7 @@ type EnvVariableAttributes = {
   name: string;
   description: string;
   value: string;
-  provision_type: EnvProvisionType;
+  provision_type: EnvProvision;
 };
 
 export type MiddlewareServiceResponse = {
@@ -62,6 +71,7 @@ export type MiddlewareServiceResponse = {
   hash_history: {
     [block: string]: string;
   };
+  agent_release: AgentRelease;
   home_chain: SupportedMiddlewareChain;
   keys: ServiceKeys[];
   service_path?: string;
@@ -74,14 +84,15 @@ export type MiddlewareServiceResponse = {
   env_variables: { [key: string]: EnvVariableAttributes };
 };
 
+export type ServiceValidationResponse = {
+  [service_config_id: string]: boolean;
+};
+
 type ConfigurationTemplate = {
   staking_program_id?: StakingProgramId; // added on deployment
   nft: string;
   rpc?: string; // added on deployment
   agent_id: number;
-  threshold: number;
-  use_staking: boolean;
-  use_mech_marketplace?: boolean;
   cost_of_bond: number;
   monthly_gas_estimate: number;
   fund_requirements: {
@@ -100,6 +111,7 @@ export type ServiceTemplate = {
   description: string;
   image: string;
   service_version: string;
+  agent_release: AgentRelease;
   home_chain: SupportedMiddlewareChain;
   configurations: Partial<
     Record<SupportedMiddlewareChain, ConfigurationTemplate>

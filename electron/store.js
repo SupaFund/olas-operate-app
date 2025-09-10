@@ -9,6 +9,7 @@ const schema = {
   // Global settings
   environmentName: { type: 'string', default: '' },
   lastSelectedAgentType: { type: 'string', default: 'trader' },
+  knownVersion: { type: 'string', default: '' },
 
   // First time user settings
   firstStakingRewardAchieved: { type: 'boolean', default: false },
@@ -25,7 +26,6 @@ const schema = {
       isProfileWarningDisplayed: false,
     },
   },
-  agentsFunCelo: { type: 'object', default: defaultInitialAgentSettings },
   optimus: { type: 'object', default: defaultInitialAgentSettings },
 };
 

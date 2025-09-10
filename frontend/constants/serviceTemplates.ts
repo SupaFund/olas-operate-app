@@ -1,7 +1,8 @@
 import { ethers } from 'ethers';
 
-import { EnvProvisionType, MiddlewareChain, ServiceTemplate } from '@/client';
+import { MiddlewareChain, ServiceTemplate } from '@/client';
 import { MODE_TOKEN_CONFIG, OPTIMISM_TOKEN_CONFIG } from '@/config/tokens';
+import { EnvProvisionMap as EnvProvisionType } from '@/constants/envVariables';
 import { AgentType } from '@/enums/Agent';
 import { STAKING_PROGRAM_IDS } from '@/enums/StakingProgram';
 import { TokenSymbol } from '@/enums/Token';
@@ -20,11 +21,19 @@ export const KPI_DESC_PREFIX = '[Pearl service]';
 export const PREDICT_SERVICE_TEMPLATE: ServiceTemplate = {
   agentType: AgentType.PredictTrader, // TODO: remove if causes errors on middleware
   name: 'Trader Agent', // should be unique across all services and not be updated
-  hash: 'bafybeidatmzo4m65sjdfha2aurz4mvsdxeu7coom2zcnfbnwpeyfsn4mza',
+  hash: 'bafybeicp7tzzvbg5t6d5hpt6skxpxjzgtbd5izj4qm6c5wn3kw7cc2r5g4',
   description: `${KPI_DESC_PREFIX} Trader agent for omen prediction markets`,
   image:
     'https://operate.olas.network/_next/image?url=%2Fimages%2Fprediction-agent.png&w=3840&q=75',
-  service_version: 'v0.25.11',
+  service_version: 'v0.26.2',
+  agent_release: {
+    is_aea: true,
+    repository: {
+      owner: 'valory-xyz',
+      name: 'trader',
+      version: 'v0.0.1001',
+    },
+  },
   home_chain: MiddlewareChain.GNOSIS,
   configurations: {
     [MiddlewareChain.GNOSIS]: {
@@ -32,9 +41,6 @@ export const PREDICT_SERVICE_TEMPLATE: ServiceTemplate = {
       nft: 'bafybeig64atqaladigoc3ds4arltdu63wkdrk3gesjfvnfdmz35amv7faq',
       rpc: DEFAULT_RPC, // overwritten
       agent_id: 14,
-      threshold: 1,
-      use_staking: true,
-      use_mech_marketplace: false,
       // TODO: pull fund requirements from staking program config
       cost_of_bond: +parseEther(0.001),
       monthly_gas_estimate: +parseEther(10),
@@ -92,7 +98,13 @@ export const PREDICT_SERVICE_TEMPLATE: ServiceTemplate = {
     TOOLS_ACCURACY_HASH: {
       name: 'Tools accuracy hash',
       description: '',
-      value: 'QmbyrbZkQEUYHkXzwBqkmRSNqzcQLS7QpebB2xgjjBR1zP',
+      value: 'QmWgsqncF22hPLNTyWtDzVoKPJ9gmgR1jcuLL5t31xyzzr',
+      provision_type: EnvProvisionType.FIXED,
+    },
+    ACC_INFO_FIELDS_REQUESTS: {
+      name: 'Acc info fields requests',
+      description: '',
+      value: 'nr_responses',
       provision_type: EnvProvisionType.FIXED,
     },
     MECH_INTERACT_ROUND_TIMEOUT_SECONDS: {
@@ -101,18 +113,50 @@ export const PREDICT_SERVICE_TEMPLATE: ServiceTemplate = {
       value: '900', // 15 min
       provision_type: EnvProvisionType.FIXED,
     },
+    STORE_PATH: {
+      name: 'Store path',
+      description: '',
+      value: 'persistent_data/',
+      provision_type: EnvProvisionType.COMPUTED,
+    },
+    LOG_DIR: {
+      name: 'Log directory',
+      description: '',
+      value: 'benchmarks/',
+      provision_type: EnvProvisionType.COMPUTED,
+    },
+    IRRELEVANT_TOOLS: {
+      name: 'Irrelevant tools',
+      description: '',
+      value:
+        '["native-transfer","prediction-online-lite","claude-prediction-online-lite","prediction-online-sme-lite","prediction-request-reasoning-lite","prediction-request-reasoning-claude-lite","prediction-offline-sme","deepmind-optimization","deepmind-optimization-strong","openai-gpt-3.5-turbo","openai-gpt-3.5-turbo-instruct","openai-gpt-4","openai-text-davinci-002","openai-text-davinci-003","prediction-online-sum-url-content","prediction-online-summarized-info","stabilityai-stable-diffusion-512-v2-1","stabilityai-stable-diffusion-768-v2-1","stabilityai-stable-diffusion-v1-5","stabilityai-stable-diffusion-xl-beta-v2-2-2","prediction-url-cot-claude","prediction-url-cot"]',
+      provision_type: EnvProvisionType.FIXED,
+    },
   },
 } as const;
 
 const AGENTS_FUN_COMMON_TEMPLATE: Pick<
   ServiceTemplate,
-  'env_variables' | 'hash' | 'image' | 'description' | 'service_version'
+  | 'env_variables'
+  | 'hash'
+  | 'image'
+  | 'description'
+  | 'service_version'
+  | 'agent_release'
 > = {
   hash: 'bafybeiardecju3sygh7hwuywka2bgjinbr7vrzob4mpdrookyfsbdmoq2m',
   image:
     'https://gateway.autonolas.tech/ipfs/QmQYDGMg8m91QQkTWSSmANs5tZwKrmvUCawXZfXVVWQPcu',
   description: `${KPI_DESC_PREFIX} Agents.Fun @twitter_handle`, // NOTE: @twitter_handle to be replaced with twitter username
   service_version: 'v0.8.0-alpha3',
+  agent_release: {
+    is_aea: true,
+    repository: {
+      owner: 'valory-xyz',
+      name: 'meme-ooorr',
+      version: 'v0.0.1001',
+    },
+  },
   env_variables: {
     BASE_LEDGER_RPC: {
       name: 'Base ledger RPC',
@@ -199,6 +243,12 @@ const AGENTS_FUN_COMMON_TEMPLATE: Pick<
       value: 'persistent_data/',
       provision_type: EnvProvisionType.COMPUTED,
     },
+    LOG_DIR: {
+      name: 'Log directory',
+      description: '',
+      value: 'benchmarks/',
+      provision_type: EnvProvisionType.COMPUTED,
+    },
     STAKING_TOKEN_CONTRACT_ADDRESS: {
       name: 'Staking token contract address',
       description: '',
@@ -227,8 +277,6 @@ const AGENTS_FUN_BASE_TEMPLATE: ServiceTemplate = {
       nft: 'bafybeiaakdeconw7j5z76fgghfdjmsr6tzejotxcwnvmp3nroaw3glgyve',
       rpc: DEFAULT_RPC, // overwritten
       agent_id: 43,
-      threshold: 1,
-      use_staking: true,
       cost_of_bond: +parseEther(50),
       monthly_gas_estimate: +parseEther(0.03),
       fund_requirements: {
@@ -242,41 +290,20 @@ const AGENTS_FUN_BASE_TEMPLATE: ServiceTemplate = {
   ...AGENTS_FUN_COMMON_TEMPLATE,
 } as const;
 
-// TODO: celo template (check each key)
-/**
- * Agents.fun Celo template
- */
-export const AGENTS_FUN_CELO_TEMPLATE: ServiceTemplate = {
-  agentType: AgentType.AgentsFunCelo,
-  name: 'Agents.Fun - Celo',
-  home_chain: MiddlewareChain.CELO,
-  configurations: {
-    [MiddlewareChain.CELO]: {
-      staking_program_id: STAKING_PROGRAM_IDS.MemeCeloAlpha2, // default, may be overwritten
-      nft: 'bafybeiaakdeconw7j5z76fgghfdjmsr6tzejotxcwnvmp3nroaw3glgyve',
-      rpc: DEFAULT_RPC, // overwritten
-      agent_id: 43,
-      threshold: 1,
-      use_staking: true,
-      cost_of_bond: +parseEther(50), // TODO: celo
-      monthly_gas_estimate: +parseEther(0.03), // TODO: celo
-      fund_requirements: {
-        [ethers.constants.AddressZero]: {
-          agent: +parseEther(0.00625), // TODO: celo
-          safe: +parseEther(0.0125), // TODO: celo
-        },
-      },
-    },
-  },
-  ...AGENTS_FUN_COMMON_TEMPLATE,
-} as const;
-
 const BABYDEGEN_COMMON_TEMPLATE: Pick<
   ServiceTemplate,
-  'hash' | 'service_version'
+  'hash' | 'service_version' | 'agent_release'
 > = {
-  hash: 'bafybeih7ohx7j5vrrl4kvs5igreh5jlt6tc35o7qho4qdonco27krutxkq',
-  service_version: 'v0.3.15',
+  hash: 'bafybeidbhytl4wxdzbohs2wuvtbytqexkdjvg7iynz7q2et3wo7d2znn6i',
+  service_version: 'v0.5.4',
+  agent_release: {
+    is_aea: true,
+    repository: {
+      owner: 'valory-xyz',
+      name: 'optimus',
+      version: 'v0.0.1001',
+    },
+  },
 };
 
 export const MODIUS_SERVICE_TEMPLATE: ServiceTemplate = {
@@ -292,8 +319,6 @@ export const MODIUS_SERVICE_TEMPLATE: ServiceTemplate = {
       nft: 'bafybeiafjcy63arqkfqbtjqpzxyeia2tscpbyradb4zlpzhgc3xymwmmtu',
       rpc: DEFAULT_RPC, // overwritten
       agent_id: 40,
-      threshold: 1,
-      use_staking: true,
       cost_of_bond: +parseEther(20),
       monthly_gas_estimate: +parseEther(0.011), // TODO: should be 0.0055, temp fix to avoid low balance alerts until the refund is fixed in the middleware
       fund_requirements: {
@@ -419,11 +444,29 @@ export const MODIUS_SERVICE_TEMPLATE: ServiceTemplate = {
       value: '',
       provision_type: EnvProvisionType.COMPUTED,
     },
+    LOG_DIR: {
+      name: 'Log directory',
+      description: '',
+      value: 'benchmarks/',
+      provision_type: EnvProvisionType.COMPUTED,
+    },
     RESET_PAUSE_DURATION: {
       name: 'Reset pause duration',
       description: '',
       value: '300',
       provision_type: EnvProvisionType.FIXED,
+    },
+    SSL_CERT_PATH: {
+      name: 'SSL certificate path',
+      description: '',
+      value: '',
+      provision_type: EnvProvisionType.COMPUTED,
+    },
+    SSL_KEY_PATH: {
+      name: 'SSL key path',
+      description: '',
+      value: '',
+      provision_type: EnvProvisionType.COMPUTED,
     },
   },
   ...BABYDEGEN_COMMON_TEMPLATE,
@@ -442,8 +485,6 @@ export const OPTIMUS_SERVICE_TEMPLATE: ServiceTemplate = {
       nft: 'bafybeiafjcy63arqkfqbtjqpzxyeia2tscpbyradb4zlpzhgc3xymwmmtu',
       rpc: DEFAULT_RPC, // overwritten
       agent_id: 40,
-      threshold: 1,
-      use_staking: true,
       cost_of_bond: +parseEther(20),
       monthly_gas_estimate: +parseEther(0.011),
       fund_requirements: {
@@ -547,11 +588,29 @@ export const OPTIMUS_SERVICE_TEMPLATE: ServiceTemplate = {
       value: '',
       provision_type: EnvProvisionType.COMPUTED,
     },
+    LOG_DIR: {
+      name: 'Log directory',
+      description: '',
+      value: 'benchmarks/',
+      provision_type: EnvProvisionType.COMPUTED,
+    },
     RESET_PAUSE_DURATION: {
       name: 'Reset pause duration',
       description: '',
       value: '300',
       provision_type: EnvProvisionType.FIXED,
+    },
+    SSL_CERT_PATH: {
+      name: 'SSL certificate path',
+      description: '',
+      value: '',
+      provision_type: EnvProvisionType.COMPUTED,
+    },
+    SSL_KEY_PATH: {
+      name: 'SSL key path',
+      description: '',
+      value: '',
+      provision_type: EnvProvisionType.COMPUTED,
     },
   },
   ...BABYDEGEN_COMMON_TEMPLATE,
@@ -638,7 +697,6 @@ export const SERVICE_TEMPLATES: ServiceTemplate[] = [
   PREDICT_SERVICE_TEMPLATE,
   AGENTS_FUN_BASE_TEMPLATE,
   MODIUS_SERVICE_TEMPLATE,
-  AGENTS_FUN_CELO_TEMPLATE,
   OPTIMUS_SERVICE_TEMPLATE,
   SUPAFUND_SERVICE_TEMPLATE,
 ] as const;

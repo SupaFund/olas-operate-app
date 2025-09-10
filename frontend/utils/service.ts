@@ -1,6 +1,7 @@
-import { isEmpty, isNil } from 'lodash';
+import { isEmpty, isEqual, isNil } from 'lodash';
 
-import { EnvProvisionType, ServiceTemplate } from '@/client';
+import { ServiceTemplate } from '@/client';
+import { EnvProvisionMap } from '@/constants/envVariables';
 import {
   KPI_DESC_PREFIX,
   SERVICE_TEMPLATES,
@@ -52,8 +53,8 @@ export const updateServiceIfNeeded = async (
       // If there's a new variable in the template but it's not in the service
       if (
         !serviceEnvVariable &&
-        (templateVariable.provision_type === EnvProvisionType.FIXED ||
-          templateVariable.provision_type === EnvProvisionType.COMPUTED)
+        (templateVariable.provision_type === EnvProvisionMap.FIXED ||
+          templateVariable.provision_type === EnvProvisionMap.COMPUTED)
       ) {
         envVariablesToUpdate[key] = templateVariable;
       }
@@ -62,7 +63,7 @@ export const updateServiceIfNeeded = async (
       if (
         serviceEnvVariable &&
         serviceEnvVariable.value !== templateVariable.value &&
-        templateVariable.provision_type === EnvProvisionType.FIXED
+        templateVariable.provision_type === EnvProvisionMap.FIXED
       ) {
         envVariablesToUpdate[key] = templateVariable;
       }
@@ -94,6 +95,11 @@ export const updateServiceIfNeeded = async (
     partialServiceTemplate.configurations = {
       [serviceHomeChain]: { fund_requirements: templateFundRequirements },
     };
+  }
+
+  // Check if the agent release was updated
+  if (!isEqual(service.agent_release, serviceTemplate.agent_release)) {
+    partialServiceTemplate.agent_release = serviceTemplate.agent_release;
   }
 
   if (isEmpty(partialServiceTemplate)) return;
