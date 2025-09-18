@@ -53,6 +53,7 @@ export const AGENT_CONFIG: {
     serviceApi: PredictTraderService,
     displayName: 'Prediction agent',
     description: 'Participates in prediction markets.',
+    hasExternalFunds: false,
   },
   [AgentType.Modius]: {
     isAgentEnabled: true,
@@ -70,6 +71,7 @@ export const AGENT_CONFIG: {
     displayName: 'Modius agent',
     description:
       'Invests crypto assets on your behalf and grows your portfolio on Mode network.',
+    hasExternalFunds: true,
   },
   [AgentType.Optimus]: {
     isAgentEnabled: true,
@@ -87,6 +89,7 @@ export const AGENT_CONFIG: {
     displayName: 'Optimus agent',
     description:
       'Invests crypto assets on your behalf and grows your portfolio on Optimus network.',
+    hasExternalFunds: true,
   },
   [AgentType.AgentsFun]: {
     isAgentEnabled: true,
@@ -102,20 +105,7 @@ export const AGENT_CONFIG: {
     displayName: 'Agents.fun agent - Base',
     description:
       'Autonomously posts to Twitter, creates and trades memecoins, and interacts with other agents. Agent is operating on Base chain.',
-  },
-  // TODO: celo (check each key)
-  [AgentType.AgentsFunCelo]: {
-    isAgentEnabled: false,
-    requiresSetup: true,
-    name: 'Agents.fun agent (Celo)',
-    evmHomeChainId: EvmChainId.Celo,
-    middlewareHomeChainId: MiddlewareChain.CELO,
-    requiresAgentSafesOn: [EvmChainId.Celo],
-    requiresMasterSafesOn: [EvmChainId.Celo],
-    serviceApi: AgentsFunBaseService,
-    displayName: 'Agents.fun agent - Celo',
-    description:
-      'Autonomously posts to Twitter, creates and trades memecoins, and interacts with other agents. Agent is operating on Celo chain.',
+    hasExternalFunds: false,
   },
   [AgentType.Supafund]: {
     isAgentEnabled: true,

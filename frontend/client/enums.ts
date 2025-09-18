@@ -14,21 +14,19 @@ export enum MiddlewareChain {
   GOERLI = 'goerli',
   GNOSIS = 'gnosis',
   SOLANA = 'solana',
-  OPTIMISM = 'optimistic', // @note "optimistic" and not "optimism"
+  OPTIMISM = 'optimism',
   BASE = 'base',
   MODE = 'mode',
-  CELO = 'celo',
 }
 
 /**
- * @deprecated Use `MiddlewareChainsMap` from '@/constants/chains'.
+ * @deprecated Use `SupportedMiddlewareChainMap` from '@/constants/chains'.
  */
 const MIDDLEWARE_CHAINS = {
   gnosis: MiddlewareChain.GNOSIS,
   optimism: MiddlewareChain.OPTIMISM,
   base: MiddlewareChain.BASE,
   mode: MiddlewareChain.MODE,
-  celo: MiddlewareChain.CELO,
 } as const;
 
 /**
@@ -47,13 +45,4 @@ export enum MiddlewareDeploymentStatus {
   STOPPING = 4,
   STOPPED = 5,
   DELETED = 6,
-}
-
-/**
- * @deprecated Use `MiddlewareChain` from '@/constants/envVariables'.
- */
-export enum EnvProvisionType {
-  FIXED = 'fixed',
-  USER = 'user',
-  COMPUTED = 'computed',
 }

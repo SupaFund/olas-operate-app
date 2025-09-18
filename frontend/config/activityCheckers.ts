@@ -70,8 +70,8 @@ export const GNOSIS_STAKING_PROGRAMS_ACTIVITY_CHECKERS: Record<
     getRequesterActivityCheckerContract(
       '0x7Ec96996Cd146B91779f01419db42E67463817a0',
     ),
-  [STAKING_PROGRAM_IDS.SupafundBeta]: getMechActivityCheckerContract(
-    '0x155547857680A6D51bebC5603397488988DEb1c8',
+  [STAKING_PROGRAM_IDS.SupafundTest]: getRequesterActivityCheckerContract(
+    '0x5E082F4a01b842f5E8b5b39CE74fa8E6198fCc22',
   ),
 } as const;
 
@@ -135,14 +135,5 @@ export const OPTIMISM_STAKING_PROGRAMS_ACTIVITY_CHECKERS: Record<
   ),
   [STAKING_PROGRAM_IDS.OptimusAlpha4]: getStakingActivityCheckerContract(
     '0x7Fd1F4b764fA41d19fe3f63C85d12bf64d2bbf68',
-  ),
-} as const;
-
-export const CELO_STAKING_PROGRAMS_ACTIVITY_CHECKERS: Record<
-  string,
-  MulticallContract
-> = {
-  [STAKING_PROGRAM_IDS.MemeCeloAlpha2]: getMemeActivityCheckerContract(
-    '0x3FD8C757dE190bcc82cF69Df3Cd9Ab15bCec1426',
   ),
 } as const;

@@ -1,29 +1,29 @@
 import { ValueOf } from '@/types/Util';
 
-export const EvmChainId = {
+export const EvmChainIdMap = {
   Gnosis: 100,
   Base: 8453,
   Mode: 34443,
-  Celo: 42220,
   Optimism: 10,
 } as const;
+export type EvmChainId = (typeof EvmChainIdMap)[keyof typeof EvmChainIdMap];
 
 export const EvmChainName = {
-  [EvmChainId.Gnosis]: 'Gnosis',
-  [EvmChainId.Base]: 'Base',
-  [EvmChainId.Mode]: 'Mode',
-  [EvmChainId.Celo]: 'Celo',
-  [EvmChainId.Optimism]: 'Optimism',
+  [EvmChainIdMap.Gnosis]: 'Gnosis',
+  [EvmChainIdMap.Base]: 'Base',
+  [EvmChainIdMap.Mode]: 'Mode',
+  [EvmChainIdMap.Optimism]: 'Optimism',
 } as const;
 
-export const AllEvmChainId = {
+export const AllEvmChainIdMap = {
   Ethereum: 1,
-  Gnosis: EvmChainId.Gnosis,
-  Base: EvmChainId.Base,
-  Mode: EvmChainId.Mode,
-  Celo: EvmChainId.Celo,
-  Optimism: EvmChainId.Optimism,
+  Gnosis: EvmChainIdMap.Gnosis,
+  Base: EvmChainIdMap.Base,
+  Mode: EvmChainIdMap.Mode,
+  Optimism: EvmChainIdMap.Optimism,
 } as const;
+export type AllEvmChainId =
+  (typeof AllEvmChainIdMap)[keyof typeof AllEvmChainIdMap];
 
 /**
  * @note Use this enum to infer all the middleware chains existing in the system
@@ -32,22 +32,34 @@ export const AllEvmChainId = {
  * @warning The value doesn’t actually represent the real chain name;
  * it reflects the open-autonomy internal name instead.
  */
-export const MiddlewareChain = {
+export const MiddlewareChainMap = {
   ETHEREUM: 'ethereum',
   GOERLI: 'goerli',
   GNOSIS: 'gnosis',
   SOLANA: 'solana',
-  OPTIMISM: 'optimistic', // @note "optimistic" and not "optimism"
+  OPTIMISM: 'optimism',
   BASE: 'base',
   MODE: 'mode',
-  CELO: 'celo',
 } as const;
+export type MiddlewareChain = ValueOf<typeof MiddlewareChainMap>;
 
-const MiddlewareChainsMap = {
-  gnosis: MiddlewareChain.GNOSIS,
-  optimism: MiddlewareChain.OPTIMISM,
-  base: MiddlewareChain.BASE,
-  mode: MiddlewareChain.MODE,
-  celo: MiddlewareChain.CELO,
+const SupportedMiddlewareChainMap = {
+  gnosis: MiddlewareChainMap.GNOSIS,
+  optimism: MiddlewareChainMap.OPTIMISM,
+  base: MiddlewareChainMap.BASE,
+  mode: MiddlewareChainMap.MODE,
 } as const;
-export type SupportedMiddlewareChain = ValueOf<typeof MiddlewareChainsMap>;
+export type SupportedMiddlewareChain = ValueOf<
+  typeof SupportedMiddlewareChainMap
+>;
+
+/**
+ * Map of middleware chains to EVM chain IDs for on-ramp purposes.
+ * For example, If the agent is on Gnosis, the on-ramp will be done on Optimism.
+ */
+export const onRampChainMap: Record<SupportedMiddlewareChain, EvmChainId> = {
+  [SupportedMiddlewareChainMap.gnosis]: EvmChainIdMap.Base,
+  [SupportedMiddlewareChainMap.optimism]: EvmChainIdMap.Optimism,
+  [SupportedMiddlewareChainMap.base]: EvmChainIdMap.Base,
+  [SupportedMiddlewareChainMap.mode]: EvmChainIdMap.Optimism,
+};

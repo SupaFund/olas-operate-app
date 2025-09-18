@@ -37,6 +37,8 @@ const nextConfig = {
     'rc-upload',
     '@babel/runtime',
     '@ant-design',
+    'rc-tree',
+    'rc-table',
   ],
   webpack: (config) => {
     if (config.snapshot) {

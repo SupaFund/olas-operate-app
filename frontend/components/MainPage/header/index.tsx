@@ -2,6 +2,7 @@ import { Flex } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 
 import { MiddlewareDeploymentStatus } from '@/client';
+import { AgentProfile } from '@/components/AgentProfile';
 import { CardSection } from '@/components/styled/CardSection';
 import { useBalanceContext } from '@/hooks/useBalanceContext';
 import { useElectronApi } from '@/hooks/useElectronApi';
@@ -11,9 +12,10 @@ import { useServices } from '@/hooks/useServices';
 import { FirstRunModal } from '../modals/FirstRunModal';
 import { AgentButton } from './AgentButton/AgentButton';
 import { AgentHead } from './AgentHead';
-import { AgentProfileButton } from './AgentProfileButton';
+import { AgentProfileButton } from '../../AgentProfile';
 import { SupafundSettingsButton } from './SupafundDashboardButton';
 import { SwitchAgentButton } from './SwitchAgentButton';
+import { AgentSettingsButton } from './AgentSettingsButton';
 
 const useSetupTrayIcon = () => {
   const { isLowBalance } = useBalanceContext();
@@ -41,7 +43,6 @@ export const MainHeader = () => {
   const handleModalClose = useCallback(() => setIsFirstRunModalOpen(false), []);
 
   useSetupTrayIcon();
-  // TODO: support loading state
 
   return (
     <CardSection gap={6} padding="12px 20px">
