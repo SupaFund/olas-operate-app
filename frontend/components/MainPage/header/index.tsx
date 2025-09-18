@@ -12,7 +12,7 @@ import { useServices } from '@/hooks/useServices';
 import { FirstRunModal } from '../modals/FirstRunModal';
 import { AgentButton } from './AgentButton/AgentButton';
 import { AgentHead } from './AgentHead';
-import { AgentProfileButton } from './AgentProfileButton';
+import { AgentProfileButton } from '../../AgentProfile';
 import { SupafundSettingsButton } from './SupafundDashboardButton';
 import { SwitchAgentButton } from './SwitchAgentButton';
 import { AgentSettingsButton } from './AgentSettingsButton';

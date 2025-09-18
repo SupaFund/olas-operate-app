@@ -237,3 +237,5 @@ export const AgentProfile = ({ renderContainer }: AgentProfileProps) => {
 
   return agentProfileLink;
 };
+
+export { AgentProfileButton };

@@ -9,6 +9,7 @@ const GNOSIS_STAKING_PROGRAM_IDS = {
   PearlBeta5: 'pearl_beta_5',
   PearlBeta6: 'pearl_beta_6',
   PearlBetaMechMarketplace: 'pearl_beta_mech_marketplace',
+  SupafundTest: 'supafund_test',
 } as const;
 
 const BASE_STAKING_PROGRAM_IDS = {

@@ -19,6 +19,7 @@ import {
   ServiceValidationResponse,
 } from '@/client';
 import { AGENT_CONFIG } from '@/config/agents';
+import { SERVICE_TEMPLATES } from '@/constants/serviceTemplates';
 import {
   FIFTEEN_SECONDS_INTERVAL,
   FIVE_SECONDS_INTERVAL,
@@ -271,17 +272,30 @@ export const ServicesProvider = ({ children }: PropsWithChildren) => {
     if (!selectedAgentConfig) return;
     if (isNilOrEmpty(services)) return;
 
-    const currentService = services.find(
-      ({ home_chain }) =>
-        home_chain === selectedAgentConfig.middlewareHomeChainId,
+    const targetServiceName = SERVICE_TEMPLATES.find(
+      (t) => t.agentType === selectedAgentType,
+    )?.name;
+
+    // Prefer a service that is already staked on the selected home chain for this agent type
+    const candidates = services.filter(({ home_chain, name }) =>
+      home_chain === selectedAgentConfig.middlewareHomeChainId &&
+      (!!targetServiceName ? name === targetServiceName : true),
     );
+
+    // Attempt to select a staked service first
+    const stakedCandidate = candidates.find((svc) => {
+      const chainCfg = svc.chain_configs?.[selectedAgentConfig.middlewareHomeChainId];
+      return chainCfg?.chain_data?.staked === true;
+    });
+
+    const currentService = stakedCandidate ?? candidates[0];
     if (!currentService) {
       setSelectedServiceConfigId(null);
       return;
     }
 
     setSelectedServiceConfigId(currentService.service_config_id);
-  }, [selectedServiceConfigId, services, selectedAgentConfig]);
+  }, [selectedServiceConfigId, services, selectedAgentConfig, selectedAgentType]);
 
   return (
     <ServicesContext.Provider

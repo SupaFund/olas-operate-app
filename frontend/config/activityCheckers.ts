@@ -70,6 +70,9 @@ export const GNOSIS_STAKING_PROGRAMS_ACTIVITY_CHECKERS: Record<
     getRequesterActivityCheckerContract(
       '0x7Ec96996Cd146B91779f01419db42E67463817a0',
     ),
+  [STAKING_PROGRAM_IDS.SupafundTest]: getRequesterActivityCheckerContract(
+    '0x5E082F4a01b842f5E8b5b39CE74fa8E6198fCc22',
+  ),
 } as const;
 
 export const BASE_STAKING_PROGRAMS_ACTIVITY_CHECKERS: Record<

@@ -55,6 +55,9 @@ export interface UserPosition {
   };
 }
 
+// 统一的 Supafund 市场创建者地址（用于过滤 Omen 市场）
+const SUPAFUND_CREATOR = '0xAFD5806E1fc7f706236e2F294ab1745A26bDB720';
+
 // 查询用户的交易历史
 export const queryUserTrades = async (userAddress: string): Promise<TradeData[]> => {
   if (!userAddress) {
@@ -106,7 +109,7 @@ export const queryUserTrades = async (userAddress: string): Promise<TradeData[]>
 
 // 查询当前市场机会
 export const queryMarketOpportunities = async (): Promise<MarketData[]> => {
-  const creatorAddress = "0x92F869018B5F954a4197a15feb951CF9260c54a8";
+  const creatorAddress = SUPAFUND_CREATOR;
   
   const query = gql`
     query GetMarketOpportunities {

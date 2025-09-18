@@ -631,7 +631,7 @@ export const SUPAFUND_SERVICE_TEMPLATE: ServiceTemplate = {
   home_chain: MiddlewareChain.GNOSIS,
   configurations: {
     [MiddlewareChain.GNOSIS]: {
-      staking_program_id: STAKING_PROGRAM_IDS.PearlBeta,
+      staking_program_id: STAKING_PROGRAM_IDS.SupafundTest,
       nft: 'bafybeig64atqaladigoc3ds4arltdu63wkdrk3gesjfvnfdmz35amv7faq', // TODO: Replace with Supafund NFT
       rpc: DEFAULT_RPC,
       agent_id: 14, // TODO: Replace with Supafund agent ID
@@ -669,13 +669,13 @@ export const SUPAFUND_SERVICE_TEMPLATE: ServiceTemplate = {
     SUPAFUND_MARKET_CREATORS: {
       name: 'Supafund market creator addresses',
       description: 'List of addresses that create Supafund prediction markets',
-      value: '["0x89c5cc945dd550BcFfb72Fe42BfF002429F46Fec"]', // TODO: Replace with actual Supafund creator addresses
+      value: '["0xAFD5806E1fc7f706236e2F294ab1745A26bDB720"]',
       provision_type: EnvProvisionType.FIXED,
     },
     CREATOR_PER_SUBGRAPH: {
       name: 'Market creators per subgraph',
       description: 'JSON mapping of subgraph names to creator addresses',
-      value: '{"omen_subgraph":["0x92F869018B5F954a4197a15feb951CF9260c54a8"]}',
+      value: '{"omen_subgraph":["0xAFD5806E1fc7f706236e2F294ab1745A26bDB720"]}',
       provision_type: EnvProvisionType.FIXED,
     },
     MIN_EDGE_THRESHOLD: {

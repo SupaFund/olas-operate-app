@@ -9,6 +9,7 @@ import {
 } from 'react';
 
 import { DEFAULT_STAKING_PROGRAM_IDS } from '@/config/stakingPrograms';
+import { STAKING_PROGRAM_IDS } from '@/enums/StakingProgram';
 import { FIVE_SECONDS_INTERVAL } from '@/constants/intervals';
 import { REACT_QUERY_KEYS } from '@/constants/react-query-keys';
 import { StakingProgramId } from '@/enums/StakingProgram';
@@ -51,10 +52,9 @@ const useGetActiveStakingProgramId = (serviceNftTokenId: Maybe<number>) => {
           evmHomeChainId,
         );
 
-      return (
-        currentStakingProgramId ||
-        DEFAULT_STAKING_PROGRAM_IDS[selectedAgentConfig.evmHomeChainId]
-      );
+      // If service is not staked yet, do not fallback here.
+      // Let the provider use the agent-specific defaultStakingProgramId instead.
+      return currentStakingProgramId;
     },
     enabled: !isNil(evmHomeChainId) && isServicesLoaded && !!serviceNftTokenId,
     refetchInterval: FIVE_SECONDS_INTERVAL,
@@ -96,13 +96,19 @@ export const StakingProgramProvider = ({ children }: PropsWithChildren) => {
   const { selectedService, selectedAgentConfig } = useServices();
 
   const [defaultStakingProgramId, setDefaultStakingProgramId] = useState(
-    DEFAULT_STAKING_PROGRAM_IDS[selectedAgentConfig.evmHomeChainId],
+    selectedAgentConfig?.name === 'Supafund Agent'
+      ? STAKING_PROGRAM_IDS.SupafundTest
+      : DEFAULT_STAKING_PROGRAM_IDS[selectedAgentConfig.evmHomeChainId],
   );
 
   useEffect(() => {
-    setDefaultStakingProgramId(
-      DEFAULT_STAKING_PROGRAM_IDS[selectedAgentConfig.evmHomeChainId],
-    );
+    if (selectedAgentConfig?.name === 'Supafund Agent') {
+      setDefaultStakingProgramId(STAKING_PROGRAM_IDS.SupafundTest);
+    } else {
+      setDefaultStakingProgramId(
+        DEFAULT_STAKING_PROGRAM_IDS[selectedAgentConfig.evmHomeChainId],
+      );
+    }
   }, [selectedAgentConfig]);
 
   const serviceNftTokenId = isNil(selectedService?.chain_configs)
