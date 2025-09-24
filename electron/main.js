@@ -319,7 +319,7 @@ const createSplashWindow = () => {
   splashWindow.loadURL('file://' + __dirname + '/resources/app-loading.html');
 };
 
-const HEIGHT = 700;
+const HEIGHT = 880; // increased to ensure full content fits without vertical clipping
 /**
  * Creates the main window
  */
@@ -335,7 +335,8 @@ const createMainWindow = async () => {
     fullscreenable: false,
     maximizable: false,
     width,
-    maxHeight: HEIGHT,
+    height: HEIGHT,
+    minHeight: HEIGHT,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,

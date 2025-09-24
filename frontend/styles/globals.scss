@@ -15,7 +15,33 @@ body {
   border-radius: 8px;
   user-select: none;
   scroll-behavior: smooth;
-  overflow: hidden;
+  /* Disallow horizontal scroll, allow vertical scroll */
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure the root never scrolls horizontally */
+html {
+  overflow-x: hidden;
+}
+
+/* Media helpers for small widths (Electron window ~480px) */
+@media (max-width: 480px) {
+  /* Prevent slider mark labels from wrapping/overflowing */
+  .ant-slider-mark-text {
+    font-size: 10px;
+    white-space: nowrap;
+  }
+}
+
+/* Sticky action footer container for bottom buttons */
+.sticky-actions {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  padding: 12px 0;
+  z-index: 100;
 }
 
 button,

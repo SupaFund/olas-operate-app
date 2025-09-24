@@ -37,7 +37,7 @@ const AnimatedImage = ({ imgSrc, alt }: AnimatedImageProps) => (
         width={0}
         height={0}
         sizes="100vw"
-        style={{ width: '100%', height: 'auto', minHeight: 416 }}
+        style={{ width: '100%', height: 'auto' }}
       />
     </motion.div>
   </AnimatePresence>
@@ -92,7 +92,7 @@ export const IntroductionStep = ({
   const { selectedAgentConfig } = useServices();
 
   return (
-    <div style={{ overflow: 'hidden' }}>
+    <div style={{ overflowX: 'hidden', overflowY: 'auto' }}>
       <AnimatedImage imgSrc={`/${imgSrc}.png`} alt={title} />
 
       <div style={{ padding: '12px 0px 20px 0px' }}>

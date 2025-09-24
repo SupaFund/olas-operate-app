@@ -4,6 +4,7 @@ import {
   Card,
   Col,
   Form,
+  Grid,
   Input,
   message,
   Progress,
@@ -101,6 +102,8 @@ const weightDescriptions = {
 };
 
 export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = () => {
+  const screens = Grid.useBreakpoint();
+  const isXs = !screens.md; // treat < md as small width (Electron window ~480px)
   const { goto } = useSetup();
   const [form] = Form.useForm();
   const [weights, setWeights] = useState<SupafundWeights>(defaultWeights);
@@ -129,7 +132,7 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = () => {
         apiEndpoint,
         minEdgeThreshold,
         riskTolerance,
-      };
+  };
 
       // TODO: Implement actual backend integration
       // Store in localStorage for now (will be replaced with backend)
@@ -185,7 +188,7 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = () => {
             </Row>
             <Row gutter={[8, 8]}>
               {Object.entries(presetConfigurations).map(([key, preset]) => (
-                <Col span={6} key={key}>
+                <Col xs={12} md={6} key={key}>
                   <Button
                     size="small"
                     onClick={() =>
@@ -236,7 +239,7 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = () => {
                 style={{ border: '1px solid #f0f0f0' }}
               >
                 <Row gutter={16} align="middle">
-                  <Col span={7}>
+                  <Col xs={24} md={7}>
                     <Title
                       level={5}
                       style={{ margin: 0, fontSize: '14px', fontWeight: 600 }}
@@ -257,7 +260,7 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = () => {
                       }
                     </Text>
                   </Col>
-                  <Col span={14}>
+                  <Col xs={24} md={14} style={isXs ? { marginTop: 8 } : undefined}>
                     <Slider
                       min={0}
                       max={100}
@@ -275,7 +278,7 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = () => {
                       tooltip={{ formatter: (val) => `${val}%` }}
                     />
                   </Col>
-                  <Col span={3} style={{ textAlign: 'center' }}>
+                  <Col xs={24} md={3} style={{ textAlign: 'center', ...(isXs ? { marginTop: 4 } : {}) }}>
                     <Title
                       level={4}
                       style={{
@@ -382,13 +385,7 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = () => {
               max={20}
               value={minEdgeThreshold}
               onChange={setMinEdgeThreshold}
-              marks={{
-                1: '1%',
-                5: '5%',
-                10: '10%',
-                15: '15%',
-                20: '20%',
-              }}
+              marks={{ 1: '1%', 5: '5%', 10: '10%', 15: '15%', 20: '20%' }}
               tooltip={{ formatter: (val) => `${val}% edge required` }}
             />
           </div>
@@ -406,13 +403,17 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = () => {
               max={10}
               value={riskTolerance}
               onChange={setRiskTolerance}
-              marks={{
-                1: 'Very Conservative',
-                3: 'Conservative',
-                5: 'Moderate',
-                7: 'Aggressive',
-                10: 'Very Aggressive',
-              }}
+              marks={
+                isXs
+                  ? { 1: 'VC', 3: 'C', 5: 'M', 7: 'A', 10: 'VA' }
+                  : {
+                      1: 'Very Conservative',
+                      3: 'Conservative',
+                      5: 'Moderate',
+                      7: 'Aggressive',
+                      10: 'Very Aggressive',
+                    }
+              }
               tooltip={{
                 formatter: (val) => {
                   const levels = [
@@ -435,24 +436,26 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = () => {
           </div>
         </Card>
 
-        <Space direction="horizontal" size="middle">
-          <Button
-            size="large"
-            type="primary"
-            disabled={!isWeightValid || isWeightOverLimit || isSubmitting}
-            loading={isSubmitting}
-            onClick={handleProceed}
-          >
-            {isSubmitting ? 'Saving configuration...' : 'Proceed'}
-          </Button>
-          <Button
-            size="large"
-            disabled={isSubmitting}
-            onClick={() => goto(SetupScreen.AgentIntroduction)}
-          >
-            Back
-          </Button>
-        </Space>
+        <div className="sticky-actions">
+          <Space direction="horizontal" size="middle">
+            <Button
+              size="large"
+              type="primary"
+              disabled={!isWeightValid || isWeightOverLimit || isSubmitting}
+              loading={isSubmitting}
+              onClick={handleProceed}
+            >
+              {isSubmitting ? 'Saving configuration...' : 'Proceed'}
+            </Button>
+            <Button
+              size="large"
+              disabled={isSubmitting}
+              onClick={() => goto(SetupScreen.AgentIntroduction)}
+            >
+              Back
+            </Button>
+          </Space>
+        </div>
       </Form>
     </FormFlex>
   );
