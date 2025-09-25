@@ -276,10 +276,10 @@ export const SetupEoaFunding = () => {
     selectedAgentConfig?.evmHomeChainId === EvmChainId.Gnosis &&
     selectedAgentConfig?.name?.toLowerCase().includes('supafund');
 
-  // Effective threshold: for Supafund on Gnosis, recommend 2.5 XDAI at EOA stage
+  // Effective threshold: for Supafund on Gnosis, recommend 10 XDAI at EOA stage
   const baseThreshold = currentFundingRequirements.safeCreationThreshold;
   const effectiveThreshold = isSupafundOnGnosis
-    ? Math.max(2.5, baseThreshold)
+    ? Math.max(10, baseThreshold)
     : baseThreshold;
 
   const eoaBalance = masterWalletBalances?.find(
