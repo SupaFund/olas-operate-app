@@ -20,12 +20,21 @@ import { YourWalletPage } from '@/components/YourWalletPage';
 import { Pages } from '@/enums/Pages';
 import { useElectronApi } from '@/hooks/useElectronApi';
 import { usePageState } from '@/hooks/usePageState';
+import { useServices } from '@/hooks/useServices';
+import { AgentType } from '@/enums/Agent';
+import { useNeedsFunds } from '@/hooks/useNeedsFunds';
 
 const DEFAULT_APP_HEIGHT = 700;
 
 export default function Home() {
   const { pageState, goto } = usePageState();
   const electronApi = useElectronApi();
+  const {
+    hasEnoughNativeTokenForInitialFunding,
+    hasEnoughOlasForInitialFunding,
+    isInitialFunded,
+  } = useNeedsFunds(undefined);
+  const { selectedAgentType } = useServices();
 
   useEffect(() => {
     // Only run on client side
@@ -51,6 +60,44 @@ export default function Home() {
       resizeObserver.unobserve(document.body);
     };
   }, [electronApi]);
+
+  // Flow guard (first-time):
+  // Supafund: if funds NOT satisfied and user lands on Main, redirect to Supafund Agent Settings.
+  //           Do NOT auto-redirect to Manage Staking; allow user navigation.
+  // Other agents: keep previous minimal behavior (optional redirect patterns).
+  useEffect(() => {
+    const bothSatisfied =
+      hasEnoughNativeTokenForInitialFunding === true &&
+      hasEnoughOlasForInitialFunding === true;
+
+    const isSupafund = selectedAgentType === AgentType.Supafund;
+
+    if (isSupafund) {
+      // If user is on Main and not funded, move to Supafund Agent Settings.
+      if (pageState === Pages.Main && !bothSatisfied) {
+        goto(Pages.SupafundMainSettings);
+      }
+      // Otherwise, do not force navigation. Allow Manage Staking browsing even if not funded,
+      // and allow returning to Main once funded (no redirect here).
+      return;
+    }
+
+    // Non-Supafund minimal behavior
+    if (pageState === Pages.ManageStaking && !(bothSatisfied || isInitialFunded)) {
+      goto(Pages.Main);
+      return;
+    }
+    if (pageState === Pages.Main && (bothSatisfied || isInitialFunded)) {
+      goto(Pages.ManageStaking);
+    }
+  }, [
+    pageState,
+    goto,
+    hasEnoughNativeTokenForInitialFunding,
+    hasEnoughOlasForInitialFunding,
+    isInitialFunded,
+    selectedAgentType,
+  ]);
 
   const page = useMemo(() => {
     switch (pageState) {

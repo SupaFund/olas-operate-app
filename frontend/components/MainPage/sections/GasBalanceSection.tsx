@@ -63,10 +63,15 @@ const BalanceStatus = () => {
    * If the master safe is low on native gas and the service safe balance is below the threshold,
    */
   const isLowFunds = useMemo(() => {
-    if (isNil(isMasterSafeLowOnNativeGas)) return false;
-    if (isNil(isServiceSafeLowOnNativeGas)) return false;
+    // Consider low if EITHER master safe OR service safe requires refill.
+    // If neither signal is known yet, treat as not-low to avoid flicker (loading gate will handle).
+    const masterKnown = !isNil(isMasterSafeLowOnNativeGas);
+    const serviceKnown = !isNil(isServiceSafeLowOnNativeGas);
+    if (!masterKnown && !serviceKnown) return false;
 
-    return isMasterSafeLowOnNativeGas && isServiceSafeLowOnNativeGas;
+    const masterLow = Boolean(isMasterSafeLowOnNativeGas);
+    const serviceLow = Boolean(isServiceSafeLowOnNativeGas);
+    return masterLow || serviceLow;
   }, [isMasterSafeLowOnNativeGas, isServiceSafeLowOnNativeGas]);
 
   // show notification if balance is too low

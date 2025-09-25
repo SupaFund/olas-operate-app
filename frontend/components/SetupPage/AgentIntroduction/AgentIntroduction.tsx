@@ -104,10 +104,14 @@ export const AgentIntroduction = () => {
       gotoPage(Pages.SwitchAgent);
     }
 
-    // if the selected type requires setting up an agent,
-    // should be redirected to setup screen.
+    // If the selected type requires setting up an agent,
+    // for Supafund we collect funding first, then show SetupYourAgent.
     if (selectedAgentConfig.requiresSetup) {
-      goto(SetupScreen.SetupYourAgent);
+      if (selectedAgentType === 'supafund') {
+        goto(SetupScreen.SetupEoaFunding);
+      } else {
+        goto(SetupScreen.SetupYourAgent);
+      }
     } else {
       goto(SetupScreen.SetupEoaFunding);
     }

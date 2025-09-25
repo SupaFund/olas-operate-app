@@ -19,6 +19,8 @@ import { ServiceTemplate } from '@/client';
 import { FormFlex } from '@/components/styled/FormFlex';
 import { SetupScreen } from '@/enums/SetupScreen';
 import { useSetup } from '@/hooks/useSetup';
+import { usePageState } from '@/hooks/usePageState';
+import { Pages } from '@/enums/Pages';
 
 const { Text, Title } = Typography;
 
@@ -105,6 +107,7 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = () => {
   const screens = Grid.useBreakpoint();
   const isXs = !screens.md; // treat < md as small width (Electron window ~480px)
   const { goto } = useSetup();
+  const { goto: gotoPage } = usePageState();
   const [form] = Form.useForm();
   const [weights, setWeights] = useState<SupafundWeights>(defaultWeights);
   const [apiEndpoint, setApiEndpoint] = useState('');
@@ -139,14 +142,15 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = () => {
       localStorage.setItem('supafund_config', JSON.stringify(config));
 
       message.success('Supafund agent configuration saved!');
-      goto(SetupScreen.SetupEoaFunding);
+      // After configuring, go directly to Supafund main page
+      gotoPage(Pages.Main);
     } catch (error) {
       message.error('Please check your configuration.');
       console.error('Validation failed:', error);
     } finally {
       setIsSubmitting(false);
     }
-  }, [form, weights, apiEndpoint, minEdgeThreshold, riskTolerance, goto]);
+  }, [form, weights, apiEndpoint, minEdgeThreshold, riskTolerance, gotoPage]);
 
   const totalWeight = Object.values(weights).reduce(
     (sum, weight) => sum + weight,

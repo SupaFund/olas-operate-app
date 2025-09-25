@@ -190,6 +190,7 @@ type SetupEoaFundingPropsV2 = {
   minRequiredBalance: number;
   currency: string;
   chainName: string;
+  introText?: string;
 };
 
 const SetupEoaFundingForChainV2 = ({
@@ -197,11 +198,16 @@ const SetupEoaFundingForChainV2 = ({
   minRequiredBalance,
   currency,
   chainName,
+  introText,
 }: SetupEoaFundingPropsV2) => (
   <>
     <Paragraph style={{ marginBottom: 12 }}>
-      Send funds on {chainName} to create your account. Additional funds for
-      staking and operating your agent will be requested separately.
+      {introText || (
+        <>
+          Send funds on {chainName} to create your account. Additional funds for
+          staking and operating your agent will be requested separately.
+        </>
+      )}
     </Paragraph>
 
     <CardSection>
@@ -266,6 +272,15 @@ export const SetupEoaFunding = () => {
 
   const masterEoaAddress = masterEoa?.address;
   const currentFundingRequirements = CHAIN_CONFIG[currentChain];
+  const isSupafundOnGnosis =
+    selectedAgentConfig?.evmHomeChainId === EvmChainId.Gnosis &&
+    selectedAgentConfig?.name?.toLowerCase().includes('supafund');
+
+  // Effective threshold: for Supafund on Gnosis, recommend 2.5 XDAI at EOA stage
+  const baseThreshold = currentFundingRequirements.safeCreationThreshold;
+  const effectiveThreshold = isSupafundOnGnosis
+    ? Math.max(2.5, baseThreshold)
+    : baseThreshold;
 
   const eoaBalance = masterWalletBalances?.find(
     (balance) =>
@@ -275,7 +290,7 @@ export const SetupEoaFunding = () => {
 
   const isFunded =
     eoaBalance?.evmChainId === currentChain &&
-    eoaBalance.balance >= CHAIN_CONFIG[currentChain].safeCreationThreshold;
+    eoaBalance.balance >= effectiveThreshold;
 
   // once funded, go to next chain or create safe
   const handleFunded = useCallback(async () => {
@@ -338,7 +353,7 @@ export const SetupEoaFunding = () => {
       <>
         <SetupEoaFundingForChain
           isFunded={isFunded}
-          minRequiredBalance={currentFundingRequirements.safeCreationThreshold}
+          minRequiredBalance={effectiveThreshold}
           currency={currentFundingRequirements.nativeToken.symbol}
           chainName={currentFundingRequirements.name}
         />
@@ -406,9 +421,14 @@ export const SetupEoaFunding = () => {
       {fundType === 'transfer' && (
         <SetupEoaFundingForChainV2
           isFunded={isFunded}
-          minRequiredBalance={currentFundingRequirements.safeCreationThreshold}
+          minRequiredBalance={effectiveThreshold}
           currency={currentFundingRequirements.nativeToken.symbol}
           chainName={currentFundingRequirements.name}
+          introText={
+            isSupafundOnGnosis
+              ? `Deposit ${effectiveThreshold} ${currentFundingRequirements.nativeToken.symbol} to your EOA to cover Safe creation (1.5 ${currentFundingRequirements.nativeToken.symbol}) and initial operating funds. Any excess will be forwarded to your agent automatically after the Safe is created.`
+              : undefined
+          }
         />
       )}
 

@@ -2,7 +2,6 @@ import { Flex } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 
 import { MiddlewareDeploymentStatus } from '@/client';
-import { AgentProfile } from '@/components/AgentProfile';
 import { CardSection } from '@/components/styled/CardSection';
 import { useBalanceContext } from '@/hooks/useBalanceContext';
 import { useElectronApi } from '@/hooks/useElectronApi';
@@ -12,7 +11,6 @@ import { useServices } from '@/hooks/useServices';
 import { FirstRunModal } from '../modals/FirstRunModal';
 import { AgentButton } from './AgentButton/AgentButton';
 import { AgentHead } from './AgentHead';
-import { AgentProfileButton } from '../../AgentProfile';
 import { SupafundSettingsButton } from './SupafundDashboardButton';
 import { SwitchAgentButton } from './SwitchAgentButton';
 import { AgentSettingsButton } from './AgentSettingsButton';
@@ -58,7 +56,6 @@ export const MainHeader = () => {
         <Flex gap={6} align="center">
           <SwitchAgentButton />
           <SupafundSettingsButton />
-          <AgentProfileButton />
         </Flex>
       </Flex>
     </CardSection>

@@ -22,7 +22,7 @@ export const SwitchAgentButton = () => {
         gap: '4px'
       }}
     >
-      Switch
+      Switch Agent
     </Button>
   );
 };
