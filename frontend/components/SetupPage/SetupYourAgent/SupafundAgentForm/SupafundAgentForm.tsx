@@ -207,6 +207,8 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = () => {
                       textAlign: 'left',
                       border: '1px solid #d9d9d9',
                       borderRadius: '4px',
+                      whiteSpace: 'normal', // allow wrapping inside button
+                      lineHeight: 1.2,
                     }}
                     className="hover:border-blue-400 hover:bg-blue-50 transition-colors"
                   >
@@ -217,13 +219,21 @@ export const SupafundAgentForm: React.FC<SupafundAgentFormProps> = () => {
                           fontSize: '11px',
                           display: 'block',
                           lineHeight: '1.2',
+                          whiteSpace: 'normal',
+                          wordBreak: 'break-word',
                         }}
                       >
                         {preset.name}
                       </Text>
                       <Text
                         type="secondary"
-                        style={{ fontSize: '9px', lineHeight: '1.2' }}
+                        style={{
+                          fontSize: '9px',
+                          lineHeight: '1.2',
+                          whiteSpace: 'normal',
+                          wordBreak: 'break-word',
+                          display: 'block',
+                        }}
                       >
                         {preset.description}
                       </Text>
