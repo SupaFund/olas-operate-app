@@ -74,13 +74,12 @@ export const LastTransaction = ({ serviceConfigId }: LastTransactionProps) => {
   }
 
   return (
-    <Text type="secondary" className="text-xs">
-      Last tx:&nbsp;
+    <Text type="secondary" className="text-xs" style={{ whiteSpace: 'nowrap' }}>
+      Tx:&nbsp;
       <Text
-        ellipsis
         type="secondary"
         className="text-xs pointer hover-underline"
-        style={{ maxWidth: 72 }}
+        style={{ whiteSpace: 'nowrap' }}
         onClick={() =>
           window.open(
             `${EXPLORER_URL_BY_MIDDLEWARE_CHAIN[asMiddlewareChain(chainId)]}/tx/${transaction.hash}`,

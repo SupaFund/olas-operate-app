@@ -87,30 +87,49 @@ export abstract class SupafundService extends StakedAgentService {
     const eligibleRequests =
       mechRequestCount - mechRequestCountOnLastCheckpoint;
 
-    const isEligible = eligibleRequests >= requiredMechRequests;
+    const isEligibleForRewards = eligibleRequests >= requiredMechRequests;
 
-    const totalRewardsAvailableETH = Number(
-      formatEther(rewardsPerSecond * ONE_YEAR),
+    // Compute available rewards for current epoch using BigNumber math
+    const secondsSinceCheckpoint = Math.max(
+      0,
+      nowInSeconds - (typeof tsCheckpoint?.toNumber === 'function'
+        ? tsCheckpoint.toNumber()
+        : Number(tsCheckpoint)),
     );
-    const minimumStakedAmountETH = Number(formatEther(minStakingDeposit));
-    const accruedServiceStakingRewardETH = Number(
-      formatEther(accruedStakingReward),
+    const livenessPeriodSec =
+      typeof livenessPeriod?.toNumber === 'function'
+        ? livenessPeriod.toNumber()
+        : Number(livenessPeriod);
+    const effectivePeriodSec = Math.max(livenessPeriodSec, secondsSinceCheckpoint);
+
+    const rpsBN = ethers.BigNumber.from(rewardsPerSecond);
+    const availableRewardsForEpoch = Number(
+      formatEther(rpsBN.mul(effectivePeriodSec)),
     );
 
-    const estimatedAnnualReward = isEligible
-      ? totalRewardsAvailableETH
-      : totalRewardsAvailableETH * 0.5;
+    // Minimum staked amount is double the minimum staking deposit
+    const minimumStakedAmount =
+      parseFloat(formatEther(ethers.BigNumber.from(minStakingDeposit))) * 2;
 
+    const accruedServiceStakingRewards = parseFloat(
+      formatEther(ethers.BigNumber.from(accruedStakingReward)),
+    );
+
+    // Return shape compatible with StakingRewardsInfoSchema
     return {
+      serviceInfo,
+      livenessPeriod,
+      livenessRatio,
+      rewardsPerSecond,
+      isEligibleForRewards,
+      availableRewardsForEpoch,
+      accruedServiceStakingRewards,
+      minimumStakedAmount,
+      // extra fields (ignored by Zod) for potential Supafund UI usage
       serviceId,
       stakingProgramId,
       stakingProgram: stakingProgramConfig.name,
-      availableRewardsForEpochETH: totalRewardsAvailableETH,
-      minimumStakedAmountETH,
-      accruedServiceStakingRewardETH,
-      isEligibleForRewards: isEligible,
-      estimatedAnnualReward,
-    };
+    } as StakingRewardsInfo & Record<string, unknown>;
   };
 
   /**
@@ -309,11 +328,22 @@ export abstract class SupafundService extends StakedAgentService {
     const { contract: stakingTokenProxyContract } = stakingProgramConfig;
     const provider = PROVIDERS[chainId].multicallProvider;
 
-    const rewardsPerSecond = await provider.all([
+    const contractCalls = [
       stakingTokenProxyContract.rewardsPerSecond(),
-    ]);
+      stakingTokenProxyContract.livenessPeriod(), // epoch length
+      stakingTokenProxyContract.tsCheckpoint(), // last checkpoint timestamp
+    ];
 
-    return rewardsPerSecond[0] * BigInt(ONE_YEAR);
+    const multicallResponse = await provider.all(contractCalls);
+    const [rewardsPerSecond, livenessPeriod, tsCheckpoint] = multicallResponse;
+    const nowInSeconds = Math.floor(Date.now() / 1000);
+
+    return BigInt(
+      Math.max(
+        rewardsPerSecond * livenessPeriod, // expected rewards
+        rewardsPerSecond * (nowInSeconds - tsCheckpoint), // incase of late checkpoint
+      ),
+    );
   };
 
   static getServiceStakingDetails = async (

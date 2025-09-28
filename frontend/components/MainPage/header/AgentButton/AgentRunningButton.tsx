@@ -99,9 +99,9 @@ export const AgentRunningButton = () => {
       </Button>
 
       <Flex vertical align="start">
-        <Flex>
+        <Flex style={{ flexWrap: 'nowrap', alignItems: 'baseline', minWidth: 0 }}>
           {isEligibleForRewards ? (
-            <Text type="secondary" className="text-xs">
+            <Text type="secondary" className="text-xs" style={{ whiteSpace: 'nowrap', flex: '0 0 auto' }}>
               <IdleTooltip />
               &nbsp;Idle
             </Text>
@@ -109,6 +109,7 @@ export const AgentRunningButton = () => {
             <Text
               type="secondary"
               className={`text-xs ${canShowLastTransaction ? '' : 'loading-ellipses '}`}
+              style={{ whiteSpace: 'nowrap', flex: '0 0 auto' }}
             >
               Working
             </Text>
@@ -116,10 +117,22 @@ export const AgentRunningButton = () => {
 
           {canShowLastTransaction && (
             <>
-              <Text style={{ lineHeight: 1 }}>
+              <Text style={{ lineHeight: 1, flex: '0 0 auto' }}>
                 &nbsp;{UNICODE_SYMBOLS.SMALL_BULLET}&nbsp;
               </Text>
-              <LastTransaction serviceConfigId={serviceConfigId} />
+              <span
+                style={{
+                  display: 'inline-block',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  minWidth: 0,
+                  maxWidth: 180,
+                  verticalAlign: 'bottom',
+                }}
+              >
+                <LastTransaction serviceConfigId={serviceConfigId} />
+              </span>
             </>
           )}
         </Flex>

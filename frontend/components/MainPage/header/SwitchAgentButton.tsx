@@ -1,4 +1,3 @@
-import { SwapOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 
 import { Pages } from '@/enums/Pages';
@@ -10,7 +9,6 @@ export const SwitchAgentButton = () => {
   return (
     <Button
       type="text"
-      icon={<SwapOutlined />}
       onClick={() => goto(Pages.SwitchAgent)}
       size="small"
       style={{ 
