@@ -57,8 +57,8 @@ export const MainNeedsFunds = () => {
           </Title>
           {selectedAgentType === AgentType.Supafund && (
             <Typography.Text type="secondary">
-              Note: The previous 1.5 xDAI was deposited to your EOA to create a Safe.
-              Now fund your Safe with operating xDAI and OLAS for staking.
+              Note: 1.5 xDAI was deposited to your EOA to create a Safe, the rest were transferred to your agent wallet. 
+              Now fund your Safe with OLAS for staking.
             </Typography.Text>
           )}
 

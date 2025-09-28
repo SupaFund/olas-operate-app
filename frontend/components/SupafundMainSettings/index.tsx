@@ -36,6 +36,7 @@ export const SupafundMainSettings = () => {
   const {
     hasEnoughNativeTokenForInitialFunding,
     hasEnoughOlasForInitialFunding,
+    isInitialFunded,
   } = useNeedsFunds(selectedStakingProgramId);
 
   const bothSatisfied = useMemo(
@@ -48,18 +49,18 @@ export const SupafundMainSettings = () => {
   // Only auto-return to Main when user enters this page unfunded and becomes funded here
   const [enteredUnfunded] = useState<boolean>(() => !bothSatisfied);
   useEffect(() => {
-    if (enteredUnfunded && bothSatisfied) {
-      // After funding is done, move to SetupYourAgent (post-funding configuration)
+    // Only during onboarding gating (i.e., before initial funding is completed)
+    if (!isInitialFunded && enteredUnfunded && bothSatisfied) {
       gotoSetup(SetupScreen.SetupYourAgent);
     }
-  }, [bothSatisfied, enteredUnfunded, gotoSetup]);
+  }, [bothSatisfied, enteredUnfunded, gotoSetup, isInitialFunded]);
 
   return (
     <CardFlex>
       {/* Header with back button */}
       <Card style={{ marginBottom: '16px' }}>
         <Flex align="center" gap={12}>
-          {bothSatisfied ? (
+          {isInitialFunded || bothSatisfied ? (
             <Button
               icon={<ArrowLeftOutlined />}
               onClick={() => goto(Pages.Main)}

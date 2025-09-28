@@ -73,8 +73,8 @@ export default function Home() {
     const isSupafund = selectedAgentType === AgentType.Supafund;
 
     if (isSupafund) {
-      // If user is on Main and not funded, move to Supafund Agent Settings.
-      if (pageState === Pages.Main && !bothSatisfied) {
+      // Gate only during onboarding (before initial funding is completed)
+      if (pageState === Pages.Main && !bothSatisfied && !isInitialFunded) {
         goto(Pages.SupafundMainSettings);
       }
       // Otherwise, do not force navigation. Allow Manage Staking browsing even if not funded,
