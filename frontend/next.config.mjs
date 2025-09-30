@@ -39,6 +39,7 @@ const nextConfig = {
     '@ant-design',
     'rc-tree',
     'rc-table',
+    'rc-input',
   ],
   webpack: (config) => {
     if (config.snapshot) {
