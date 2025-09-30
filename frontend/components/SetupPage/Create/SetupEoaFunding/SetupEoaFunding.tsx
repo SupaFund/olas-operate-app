@@ -279,7 +279,7 @@ export const SetupEoaFunding = () => {
   // Effective threshold: for Supafund on Gnosis, recommend 10 XDAI at EOA stage
   const baseThreshold = currentFundingRequirements.safeCreationThreshold;
   const effectiveThreshold = isSupafundOnGnosis
-    ? Math.max(10, baseThreshold)
+    ? Math.max(3, baseThreshold)
     : baseThreshold;
 
   const eoaBalance = masterWalletBalances?.find(
