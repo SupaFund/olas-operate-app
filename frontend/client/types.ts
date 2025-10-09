@@ -176,9 +176,13 @@ export type BalancesAndFundingRequirements = {
   total_requirements: {
     [chain in MiddlewareChain]: AddressBalanceRecord | MasterSafeBalanceRecord;
   };
-  bonded_olas: {
-    [chain in MiddlewareChain]: number;
-  };
+  /**
+   * Bonded assets (OLAS and other tokens) that are locked in staking contracts
+   * These assets can be recovered by running the agent to unstake/unbond
+   */
+  bonded_assets: Partial<{
+    [chain in MiddlewareChain]: { [tokenAddress: Address]: number };
+  }>;
   is_refill_required: boolean;
   allow_start_agent: boolean;
 };

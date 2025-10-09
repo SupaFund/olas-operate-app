@@ -30,7 +30,7 @@
     "@types/jest": "^29.5.12",
     "@types/lodash": "^4.14.202",
     "@types/node": "20.14.10",
-    "@types/react": "18.3.3",
+    "@types/react": "19.1.13",
     "@types/react-dom": "^18",
     "@types/zxcvbn": "^4.4.5",
     "@typescript-eslint/eslint-plugin": "^7.18.0",

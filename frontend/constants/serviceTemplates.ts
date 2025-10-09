@@ -642,8 +642,8 @@ export const SUPAFUND_SERVICE_TEMPLATE: ServiceTemplate = {
       monthly_gas_estimate: +parseEther(1),
       fund_requirements: {
         [ethers.constants.AddressZero]: {
-          agent: +parseEther(2),
-          safe: +parseEther(5),
+          agent: +parseEther(1),
+          safe: +parseEther(1),
         },
       },
     },

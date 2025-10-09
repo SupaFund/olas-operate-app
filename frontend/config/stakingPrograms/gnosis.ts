@@ -31,7 +31,7 @@ export const GNOSIS_STAKING_PROGRAMS_CONTRACT_ADDRESSES: Record<
   [STAKING_PROGRAM_IDS.PearlBetaMechMarketplace]:
     '0xDaF34eC46298b53a3d24CBCb431E84eBd23927dA',
   [STAKING_PROGRAM_IDS.SupafundTest]:
-    '0xe962DD85866F41F008bA5edf0F92583460E4F935',
+    '0x2540Ea7b11a557957a913E7Ef314A9aF28472c08',
 } as const;
 
 export const GNOSIS_STAKING_PROGRAMS: StakingProgramMap = {
@@ -185,7 +185,7 @@ export const GNOSIS_STAKING_PROGRAMS: StakingProgramMap = {
     name: 'Supafund Agent test',
     agentsSupported: [AgentType.Supafund],
     stakingRequirements: {
-      [TokenSymbol.OLAS]: 20, // display hint; min deposit 10 -> total stake ~20
+      [TokenSymbol.OLAS]: 2, // display hint; min deposit 1 -> total stake ~2
     },
     mechType: MechType.Agent,
     mech: MECHS[EvmChainId.Gnosis][MechType.Agent].contract,
