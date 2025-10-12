@@ -39,7 +39,7 @@ export const SupafundSettingsButton = () => {
           color: '#666',
           height: '28px',
           display: 'flex',
-          alignItems: 'center',
+          alignItems: 'center'
         }}
       />
     </Tooltip>

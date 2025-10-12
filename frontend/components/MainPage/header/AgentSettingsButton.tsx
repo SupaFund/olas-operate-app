@@ -40,7 +40,7 @@ export const AgentSettingsButton = () => {
           color: isAgentSettingsEnabled ? '#666' : '#ccc',
           height: '28px',
           display: 'flex',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       />
     </Tooltip>

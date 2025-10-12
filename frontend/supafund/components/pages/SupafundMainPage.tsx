@@ -1,18 +1,18 @@
 import { useMemo } from 'react';
 
 import { CardFlex } from '@/components/styled/CardFlex';
-import { SupafundDashboard } from '@/components/SupafundDashboard';
+import { MainHeader } from '@/components/MainPage/header';
+import { KeepAgentRunningSection } from '@/components/MainPage/sections/KeepAgentRunningSection';
 import { AgentType } from '@/enums/Agent';
 import { useServices } from '@/hooks/useServices';
 
-import { MainHeader } from './header';
-import { KeepAgentRunningSection } from './sections/KeepAgentRunningSection';
+import { SupafundDashboard } from '../sections/Dashboard';
 
 /**
  * Supafund-specific main page that shows the dashboard as primary content
  * with the start agent button preserved for easy access
  */
-export const SupafundMain = () => {
+export const SupafundMainPage = () => {
   const { selectedAgentType } = useServices();
   const isSupafundAgent = useMemo(
     () => selectedAgentType === AgentType.Supafund,
@@ -24,7 +24,7 @@ export const SupafundMain = () => {
   }
 
   return (
-    <CardFlex $padding="12px">
+    <CardFlex $padding="12px" style={{ overflowX: 'hidden' }}>
       {/* Keep the header with start agent functionality */}
       <MainHeader />
 

@@ -7,8 +7,8 @@ import { usePageState } from '@/hooks/usePageState';
 import { useServices } from '@/hooks/useServices';
 import { Nullable } from '@/types/Util';
 
-import { CardLayout } from './CardLayout';
-import { UpdateAgentContext } from './context/UpdateAgentProvider';
+import { CardLayout } from '@/components/UpdateAgentPage/CardLayout';
+import { UpdateAgentContext } from '@/components/UpdateAgentPage/context/UpdateAgentProvider';
 
 const { Title, Text } = Typography;
 
@@ -129,7 +129,7 @@ export const SupafundUpdateSetup = () => {
               </Button>
             ) : (
               <Text type="secondary">
-                Click "Edit Agent" to modify these settings.
+                Click &ldquo;Edit Agent&rdquo; to modify these settings.
               </Text>
             )}
           </div>

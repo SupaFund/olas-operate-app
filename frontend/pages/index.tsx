@@ -12,17 +12,15 @@ import { HelpAndSupport } from '@/components/Pages/HelpAndSupportPage';
 import { RewardsHistory } from '@/components/RewardsHistory/RewardsHistory';
 import { Settings } from '@/components/SettingsPage';
 import { Setup } from '@/components/SetupPage';
-import { SupafundConfiguration } from '@/components/SupafundConfiguration';
-// import { SupafundDashboard } from '@/components/SupafundDashboard'; // Now embedded in Main page
-import { SupafundMainSettings } from '@/components/SupafundMainSettings';
 import { UpdateAgentPage } from '@/components/UpdateAgentPage';
 import { YourWalletPage } from '@/components/YourWalletPage';
+import { AgentType } from '@/enums/Agent';
 import { Pages } from '@/enums/Pages';
 import { useElectronApi } from '@/hooks/useElectronApi';
+import { useNeedsFunds } from '@/hooks/useNeedsFunds';
 import { usePageState } from '@/hooks/usePageState';
 import { useServices } from '@/hooks/useServices';
-import { AgentType } from '@/enums/Agent';
-import { useNeedsFunds } from '@/hooks/useNeedsFunds';
+import { SupafundConfiguration, SupafundMainSettings } from '@/supafund';
 
 const DEFAULT_APP_HEIGHT = 700;
 
@@ -83,7 +81,10 @@ export default function Home() {
     }
 
     // Non-Supafund minimal behavior
-    if (pageState === Pages.ManageStaking && !(bothSatisfied || isInitialFunded)) {
+    if (
+      pageState === Pages.ManageStaking &&
+      !(bothSatisfied || isInitialFunded)
+    ) {
       goto(Pages.Main);
       return;
     }

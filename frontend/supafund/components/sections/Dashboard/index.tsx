@@ -14,7 +14,7 @@ import { DashboardHeader } from './components/DashboardHeader';
 import { MetricsSection } from './components/MetricsSection';
 import { OpportunitiesTab } from './components/OpportunitiesTab';
 import { PositionsTab } from './components/PositionsTab';
-import { useSupafundData } from './hooks/useSupafundData';
+import { useSupafundData } from '@/supafund/hooks/useSupafundData';
 
 const { Title } = Typography;
 const { TabPane } = Tabs;
@@ -51,14 +51,14 @@ export const SupafundDashboard = ({ hideBackButton = false }: SupafundDashboardP
   }
 
   return (
-    <CardFlex $noBorder>
+    <CardFlex $noBorder style={{ overflowX: 'hidden' }}>
       {!hideBackButton && (
         <div style={{ marginBottom: '20px' }}>
           <Button
             icon={<ArrowLeftOutlined />}
             onClick={() => goto(Pages.SwitchAgent)}
             type="text"
-            style={{ 
+            style={{
               padding: '4px 8px',
               color: '#666',
               fontSize: '14px'
@@ -81,17 +81,17 @@ export const SupafundDashboard = ({ hideBackButton = false }: SupafundDashboardP
           <MetricsSection metrics={metrics} />
         </div>
 
-        <Card 
-          style={{ 
+        <Card
+          style={{
             borderRadius: '8px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.06)' 
+            boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
           }}
           bodyStyle={{ padding: '20px' }}
         >
-          <Tabs 
-            defaultActiveKey="opportunities" 
+          <Tabs
+            defaultActiveKey="opportunities"
             size="large"
-            tabBarStyle={{ 
+            tabBarStyle={{
               marginBottom: '20px',
               borderBottom: '1px solid #f0f0f0'
             }}

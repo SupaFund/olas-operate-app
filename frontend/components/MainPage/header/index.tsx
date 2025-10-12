@@ -7,13 +7,12 @@ import { useBalanceContext } from '@/hooks/useBalanceContext';
 import { useElectronApi } from '@/hooks/useElectronApi';
 import { useService } from '@/hooks/useService';
 import { useServices } from '@/hooks/useServices';
+import { SupafundSettingsButton } from '@/supafund/components/sections/Header/DashboardButton';
 
 import { FirstRunModal } from '../modals/FirstRunModal';
 import { AgentButton } from './AgentButton/AgentButton';
 import { AgentHead } from './AgentHead';
-import { SupafundSettingsButton } from './SupafundDashboardButton';
 import { SwitchAgentButton } from './SwitchAgentButton';
-import { AgentSettingsButton } from './AgentSettingsButton';
 
 const useSetupTrayIcon = () => {
   const { isLowBalance } = useBalanceContext();
@@ -44,12 +43,19 @@ export const MainHeader = () => {
 
   return (
     <CardSection gap={6} padding="12px 20px">
-      <Flex justify="space-between" align="center" style={{ minHeight: '32px' }}>
+      <Flex
+        justify="space-between"
+        align="center"
+        style={{ minHeight: '32px' }}
+      >
         {/* Left: Agent info and main control */}
         <Flex justify="start" align="center" gap={12}>
           <AgentHead />
           <AgentButton />
-          <FirstRunModal open={isFirstRunModalOpen} onClose={handleModalClose} />
+          <FirstRunModal
+            open={isFirstRunModalOpen}
+            onClose={handleModalClose}
+          />
         </Flex>
 
         {/* Right: Compact action buttons */}

@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { AgentType } from '@/enums/Agent';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag';
 import { useServices } from '@/hooks/useServices';
+import { SupafundMainPage } from '@/supafund';
 
 import { MainHeader } from './header';
 import { AddFundsSection } from './sections/AddFundsSection';
@@ -14,7 +15,6 @@ import { MainOlasBalance } from './sections/OlasBalanceSection';
 import { RewardsSection } from './sections/RewardsSection';
 import { StakingContractSection } from './sections/StakingContractUpdate';
 import { SwitchAgentSection } from './sections/SwitchAgentSection';
-import { SupafundMain } from './SupafundMain';
 
 export const Main = () => {
   const { selectedAgentType } = useServices();
@@ -29,7 +29,7 @@ export const Main = () => {
 
   // For Supafund agents, show the specialized dashboard layout
   if (isSupafundAgent) {
-    return <SupafundMain />;
+    return <SupafundMainPage />;
   }
 
   // For other agents, show the original main page layout

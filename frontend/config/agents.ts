@@ -119,5 +119,6 @@ export const AGENT_CONFIG: {
     displayName: 'Supafund agent',
     description:
       'Predicts whether emerging projects will achieve key milestones, providing detailed AI-powered analysis of exciting new projects.',
+    hasExternalFunds: false,
   },
 };

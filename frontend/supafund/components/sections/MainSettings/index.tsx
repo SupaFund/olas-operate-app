@@ -11,12 +11,12 @@ import { useStakingProgram } from '@/hooks/useStakingProgram';
 import { useSetup } from '@/hooks/useSetup';
 import { SetupScreen } from '@/enums/SetupScreen';
 
-import { AddFundsSection } from '../MainPage/sections/AddFundsSection';
-import { AlertSections } from '../MainPage/sections/AlertSections';
-import { GasBalanceSection } from '../MainPage/sections/GasBalanceSection';
-import { MainOlasBalance } from '../MainPage/sections/OlasBalanceSection';
-import { RewardsSection } from '../MainPage/sections/RewardsSection';
-import { StakingContractSection } from '../MainPage/sections/StakingContractUpdate';
+import { AddFundsSection } from '@/components/MainPage/sections/AddFundsSection';
+import { AlertSections } from '@/components/MainPage/sections/AlertSections';
+import { GasBalanceSection } from '@/components/MainPage/sections/GasBalanceSection';
+import { MainOlasBalance } from '@/components/MainPage/sections/OlasBalanceSection';
+import { RewardsSection } from '@/components/MainPage/sections/RewardsSection';
+import { StakingContractSection } from '@/components/MainPage/sections/StakingContractUpdate';
 
 const { Title } = Typography;
 

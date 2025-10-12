@@ -2,13 +2,13 @@ import { ConfigProvider } from 'antd';
 
 import { AgentType } from '@/enums/Agent';
 import { useServices } from '@/hooks/useServices';
+import { SupafundUpdateSetup } from '@/supafund/components/sections/UpdateSetup';
 import { LOCAL_FORM_THEME } from '@/theme';
 
 import { AgentsFunUpdateSetup } from './AgentsFunUpdateSetup';
 import { UpdateAgentProvider } from './context/UpdateAgentProvider';
 import { ModiusUpdatePage } from './ModiusUpdateForm';
 import { OptimusUpdatePage } from './OptimusUpdateForm';
-import { SupafundUpdateSetup } from './SupafundUpdateSetup';
 
 export const UpdateAgentPage = () => {
   const { selectedAgentType } = useServices();

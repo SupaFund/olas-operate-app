@@ -2,11 +2,11 @@ import { Flex, Typography } from 'antd';
 import { useEffect } from 'react';
 
 import { CustomAlert } from '@/components/Alert';
+import { AgentType } from '@/enums/Agent';
 import { useElectronApi } from '@/hooks/useElectronApi';
 import { useNeedsFunds } from '@/hooks/useNeedsFunds';
 import { useServices } from '@/hooks/useServices';
 import { useStakingProgram } from '@/hooks/useStakingProgram';
-import { AgentType } from '@/enums/Agent';
 
 import { FundsToActivate } from './FundsToActivate';
 
@@ -57,8 +57,9 @@ export const MainNeedsFunds = () => {
           </Title>
           {selectedAgentType === AgentType.Supafund && (
             <Typography.Text type="secondary">
-              Note: 1.5 xDAI was deposited to your EOA to create a Safe, the rest were transferred to your agent wallet. 
-              Now fund your Safe with OLAS for staking.
+              Note: 1.5 xDAI was deposited to your EOA to create a Safe, the
+              rest were transferred to your agent wallet. Now fund your Safe
+              with OLAS for staking.
             </Typography.Text>
           )}
 

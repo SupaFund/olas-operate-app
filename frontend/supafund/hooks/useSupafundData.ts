@@ -13,13 +13,13 @@ import {
   ProcessedMetrics,
   ProcessedOpportunity,
   ProcessedPosition,
-} from '@/utils/supafundDataProcessor';
+} from '../utils/dataProcessor';
 import {
   fetchTraderHealthStatus,
   queryMarketOpportunities,
   queryUserPositions,
   queryUserTrades,
-} from '@/utils/supafundSubgraph';
+} from '../utils/subgraph';
 
 // Legacy interfaces for backward compatibility
 interface Metrics extends ProcessedMetrics {}

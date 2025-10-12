@@ -24,11 +24,11 @@ const AnimationContainer = styled.div`
 
 const TransitionalAgentHead = ({ isSupafund }: { isSupafund: boolean }) => (
   <Badge status="processing" color="orange" dot offset={badgeOffset}>
-    <Image 
-      src={isSupafund ? "/supafund-robot.svg" : "/happy-robot.svg"} 
-      alt={isSupafund ? "Supafund Robot" : "Happy Robot"} 
-      width={40} 
-      height={40} 
+    <Image
+      src={isSupafund ? '/supafund-robot.svg' : '/happy-robot.svg'}
+      alt={isSupafund ? 'Supafund Robot' : 'Happy Robot'}
+      width={40}
+      height={40}
     />
   </Badge>
 );
@@ -36,7 +36,7 @@ const TransitionalAgentHead = ({ isSupafund }: { isSupafund: boolean }) => (
 const DeployedAgentHead = ({ isSupafund }: { isSupafund: boolean }) => {
   const [isMounted, setIsMounted] = useState(false);
   const [lottieView, setLottieView] = useState<React.ReactNode>(null);
-  
+
   useEffect(() => {
     setIsMounted(true);
     // Only import and use lottie on client side
@@ -58,11 +58,11 @@ const DeployedAgentHead = ({ isSupafund }: { isSupafund: boolean }) => {
   if (!isMounted || !lottieView) {
     return (
       <AnimationContainer>
-        <Image 
-          src={isSupafund ? "/supafund-robot.svg" : "/happy-robot.svg"} 
-          alt={isSupafund ? "Supafund Robot" : "Happy Robot"} 
-          width={40} 
-          height={40} 
+        <Image
+          src={isSupafund ? '/supafund-robot.svg' : '/happy-robot.svg'}
+          alt={isSupafund ? 'Supafund Robot' : 'Happy Robot'}
+          width={40}
+          height={40}
         />
       </AnimationContainer>
     );
@@ -72,7 +72,12 @@ const DeployedAgentHead = ({ isSupafund }: { isSupafund: boolean }) => {
   if (isSupafund) {
     return (
       <AnimationContainer>
-        <Image src="/supafund-robot.svg" alt="Supafund Robot" width={40} height={40} />
+        <Image
+          src="/supafund-robot.svg"
+          alt="Supafund Robot"
+          width={40}
+          height={40}
+        />
       </AnimationContainer>
     );
   }
@@ -82,22 +87,22 @@ const DeployedAgentHead = ({ isSupafund }: { isSupafund: boolean }) => {
 
 const StoppedAgentHead = ({ isSupafund }: { isSupafund: boolean }) => (
   <Badge dot color="red" offset={badgeOffset}>
-    <Image 
-      src={isSupafund ? "/supafund-robot.svg" : "/sad-robot.svg"} 
-      alt={isSupafund ? "Supafund Robot" : "Sad Robot"} 
-      width={40} 
-      height={40} 
+    <Image
+      src={isSupafund ? '/supafund-robot.svg' : '/sad-robot.svg'}
+      alt={isSupafund ? 'Supafund Robot' : 'Sad Robot'}
+      width={40}
+      height={40}
     />
   </Badge>
 );
 
 const IdleAgentHead = ({ isSupafund }: { isSupafund: boolean }) => (
   <Badge dot status="processing" color="green" offset={badgeOffset}>
-    <Image 
-      src={isSupafund ? "/supafund-robot.svg" : "/idle-robot.svg"} 
-      alt={isSupafund ? "Supafund Robot" : "Idle Robot"} 
-      width={40} 
-      height={40} 
+    <Image
+      src={isSupafund ? '/supafund-robot.svg' : '/idle-robot.svg'}
+      alt={isSupafund ? 'Supafund Robot' : 'Idle Robot'}
+      width={40}
+      height={40}
     />
   </Badge>
 );

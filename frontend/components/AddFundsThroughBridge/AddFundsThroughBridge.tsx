@@ -137,7 +137,7 @@ export const AddFundsThroughBridge = ({
 }: AddFundsThroughBridgeProps) => {
   const { isBalancesAndFundingRequirementsLoading, totalRequirements } =
     useBalanceAndRefillRequirementsContext();
-  
+
   const { selectedService } = useServices();
   const { goto } = usePageState();
 
@@ -195,7 +195,8 @@ export const AddFundsThroughBridge = ({
           {!selectedService?.service_config_id ? (
             <Flex vertical align="center" gap={16}>
               <Text type="secondary">
-                No agent configured. Please set up an agent first to use the bridge feature.
+                No agent configured. Please set up an agent first to use the
+                bridge feature.
               </Text>
               <Button type="primary" onClick={() => goto(Pages.Setup)}>
                 Set up Agent

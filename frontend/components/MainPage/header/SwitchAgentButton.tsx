@@ -11,13 +11,13 @@ export const SwitchAgentButton = () => {
       type="text"
       onClick={() => goto(Pages.SwitchAgent)}
       size="small"
-      style={{ 
+      style={{
         color: '#666',
         fontSize: '12px',
         height: '28px',
         display: 'flex',
         alignItems: 'center',
-        gap: '4px'
+        gap: '4px',
       }}
     >
       Switch Agent

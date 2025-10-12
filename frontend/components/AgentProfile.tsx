@@ -47,7 +47,7 @@ const AgentProfileButton = ({
         color: selectedAgentConfig.isUnderConstruction ? '#ccc' : '#666',
         height: '28px',
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
       }}
     />
   );

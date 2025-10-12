@@ -7,13 +7,13 @@ import { SERVICE_TEMPLATES } from '@/constants/serviceTemplates';
 import { AgentType } from '@/enums/Agent';
 import { SetupScreen } from '@/enums/SetupScreen';
 import { useServices } from '@/hooks/useServices';
+import { SupafundAgentForm } from '@/supafund/components/sections/SetupForm/SupafundAgentForm';
 import { LOCAL_FORM_THEME } from '@/theme';
 
 import { SetupCreateHeader } from '../Create/SetupCreateHeader';
 import { AgentsFunAgentSetup } from './AgentsFunAgentSetup';
 import { ModiusAgentForm } from './ModiusAgentForm/ModiusAgentForm';
 import { OptimusAgentForm } from './OptimusAgentForm/OptimusAgentForm';
-import { SupafundAgentForm } from './SupafundAgentForm/SupafundAgentForm';
 
 const { Title, Text } = Typography;
 

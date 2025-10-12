@@ -99,9 +99,15 @@ export const AgentRunningButton = () => {
       </Button>
 
       <Flex vertical align="start">
-        <Flex style={{ flexWrap: 'nowrap', alignItems: 'baseline', minWidth: 0 }}>
+        <Flex
+          style={{ flexWrap: 'nowrap', alignItems: 'baseline', minWidth: 0 }}
+        >
           {isEligibleForRewards ? (
-            <Text type="secondary" className="text-xs" style={{ whiteSpace: 'nowrap', flex: '0 0 auto' }}>
+            <Text
+              type="secondary"
+              className="text-xs"
+              style={{ whiteSpace: 'nowrap', flex: '0 0 auto' }}
+            >
               <IdleTooltip />
               &nbsp;Idle
             </Text>

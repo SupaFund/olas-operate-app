@@ -1,4 +1,4 @@
-import { TradeData, MarketData, UserPosition } from './supafundSubgraph';
+import { TradeData, MarketData, UserPosition } from './subgraph';
 
 export interface ProcessedMetrics {
   totalProfitLoss: number;
