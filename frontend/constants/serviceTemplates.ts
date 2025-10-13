@@ -669,13 +669,20 @@ export const SUPAFUND_SERVICE_TEMPLATE: ServiceTemplate = {
     SUPAFUND_MARKET_CREATORS: {
       name: 'Supafund market creator addresses',
       description: 'List of addresses that create Supafund prediction markets',
-      value: '["0xAFD5806E1fc7f706236e2F294ab1745A26bDB720"]',
+      value: '["0xf765a1FE2E15d0246430CCE854D2c923a85AF388"]',
       provision_type: EnvProvisionType.FIXED,
     },
     CREATOR_PER_SUBGRAPH: {
       name: 'Market creators per subgraph',
       description: 'JSON mapping of subgraph names to creator addresses',
-      value: '{"omen_subgraph":["0xAFD5806E1fc7f706236e2F294ab1745A26bDB720"]}',
+      value: '{"omen_subgraph":["0xf765a1FE2E15d0246430CCE854D2c923a85AF388"]}',
+      provision_type: EnvProvisionType.FIXED,
+    },
+    OPENING_MARGIN: {
+      name: 'Opening margin',
+      description:
+        'Time buffer (in seconds) before market opens to start analyzing. Set to 3600 (1 hour) for short-term markets.',
+      value: '3600',
       provision_type: EnvProvisionType.FIXED,
     },
     MIN_EDGE_THRESHOLD: {
