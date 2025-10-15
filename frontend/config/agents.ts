@@ -44,7 +44,7 @@ export const AGENT_CONFIG: {
 } = {
   [AgentType.PredictTrader]: {
     isAgentEnabled: true,
-    requiresSetup: false,
+    requiresSetup: true,
     name: 'Predict Trader',
     evmHomeChainId: EvmChainId.Gnosis,
     middlewareHomeChainId: MiddlewareChain.GNOSIS,
@@ -54,24 +54,6 @@ export const AGENT_CONFIG: {
     displayName: 'Prediction agent',
     description: 'Participates in prediction markets.',
     hasExternalFunds: false,
-  },
-  [AgentType.Modius]: {
-    isAgentEnabled: true,
-    isComingSoon: false,
-    requiresSetup: true,
-    name: 'Modius agent',
-    evmHomeChainId: EvmChainId.Mode,
-    middlewareHomeChainId: MiddlewareChain.MODE,
-    requiresAgentSafesOn: [EvmChainId.Mode],
-    additionalRequirements: {
-      [EvmChainId.Mode]: { [TokenSymbol.USDC]: getModiusUsdcConfig() },
-    },
-    requiresMasterSafesOn: [EvmChainId.Mode],
-    serviceApi: ModiusService,
-    displayName: 'Modius agent',
-    description:
-      'Invests crypto assets on your behalf and grows your portfolio on Mode network.',
-    hasExternalFunds: true,
   },
   [AgentType.Optimus]: {
     isAgentEnabled: true,
@@ -120,5 +102,24 @@ export const AGENT_CONFIG: {
     description:
       'Predicts whether emerging projects will achieve key milestones, providing detailed AI-powered analysis of exciting new projects.',
     hasExternalFunds: false,
+  },
+  [AgentType.Modius]: {
+    isAgentEnabled: true,
+    isUnderConstruction: true,
+    isComingSoon: false,
+    requiresSetup: true,
+    name: 'Modius agent',
+    evmHomeChainId: EvmChainId.Mode,
+    middlewareHomeChainId: MiddlewareChain.MODE,
+    requiresAgentSafesOn: [EvmChainId.Mode],
+    additionalRequirements: {
+      [EvmChainId.Mode]: { [TokenSymbol.USDC]: getModiusUsdcConfig() },
+    },
+    requiresMasterSafesOn: [EvmChainId.Mode],
+    serviceApi: ModiusService,
+    displayName: 'Modius agent',
+    description:
+      'Invests crypto assets on your behalf and grows your portfolio on Mode network.',
+    hasExternalFunds: true,
   },
 };

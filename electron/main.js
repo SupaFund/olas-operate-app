@@ -8,6 +8,17 @@ const {
   secureFetch,
 } = require('./utils');
 
+const {
+  handleWeb3AuthWindowShow,
+  handleWeb3AuthWindowClose,
+  handleWeb3AuthSuccessLogin,
+} = require('./windows/web3auth');
+
+const {
+  handleTermsAndConditionsWindowShow,
+  handleTermsAndConditionsWindowClose,
+} = require('./windows/termsAndConditions');
+
 // Load the self-signed certificate for localhost HTTPS requests
 loadLocalCertificate();
 
@@ -408,6 +419,9 @@ const createMainWindow = async () => {
   });
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    // // web3auth links should be open in Pearl for redirect to work
+    // if (url.includes('web3auth')) return { action: 'allow' };
+
     // open url in a browser and prevent default
     require('electron').shell.openExternal(url);
     return { action: 'deny' };
@@ -1178,3 +1192,22 @@ ipcMain.handle('onramp-transaction-failure', () => {
     win.webContents.send('onramp-transaction-failure');
   });
 });
+
+/**
+ * Web3Auth window handlers
+ */
+ipcMain.handle('web3auth-window-show', () =>
+  handleWeb3AuthWindowShow(nextUrl()),
+);
+ipcMain.handle('web3auth-window-close', handleWeb3AuthWindowClose);
+ipcMain.handle('web3auth-address-received', (_event, address) =>
+  handleWeb3AuthSuccessLogin(mainWindow, address),
+);
+
+/**
+ * Terms window handlers
+ */
+ipcMain.handle('terms-window-show', (_event, type) =>
+  handleTermsAndConditionsWindowShow(nextUrl(), type),
+);
+ipcMain.handle('terms-window-close', handleTermsAndConditionsWindowClose);

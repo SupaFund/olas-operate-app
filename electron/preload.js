@@ -18,6 +18,20 @@ const onRampWindow = {
   transactionFailure: () => ipcRenderer.invoke('onramp-transaction-failure'),
 };
 
+/** IPC methods for web3auth window */
+const web3AuthWindow = {
+  show: () => ipcRenderer.invoke('web3auth-window-show'),
+  close: () => ipcRenderer.invoke('web3auth-window-close'),
+  authSuccess: (address) =>
+    ipcRenderer.invoke('web3auth-address-received', address),
+};
+
+/** IPC methods for terms window */
+const termsAndConditionsWindow = {
+  show: (type) => ipcRenderer.invoke('terms-window-show', type),
+  close: () => ipcRenderer.invoke('terms-window-close'),
+};
+
 contextBridge.exposeInMainWorld('electronAPI', {
   setIsAppLoaded: (isAppLoaded) =>
     ipcRenderer.send('is-app-loaded', isAppLoaded),
@@ -48,5 +62,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   healthCheck: () => ipcRenderer.invoke('health-check'),
   agentActivityWindow,
   onRampWindow,
+  web3AuthWindow,
+  termsAndConditionsWindow,
   logEvent: (message) => ipcRenderer.invoke('log-event', message),
 });
